@@ -1,5 +1,7 @@
 package TiendaDeAbarrotes;
 
+import static TiendaDeAbarrotes.TiendaDeAbarrotes.leer;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Proveedor extends TiendaDeAbarrotes {
@@ -16,7 +18,6 @@ public class Proveedor extends TiendaDeAbarrotes {
 
     public Proveedor(int Codigo, String Nombre, String Empresa) {
         super(Codigo, Nombre);
-        empresaProveedor = Empresa;
     }
 
     void agregarProveedores() {
@@ -126,34 +127,37 @@ public class Proveedor extends TiendaDeAbarrotes {
         }
     }
 
-    void menuProveedores() {
-        int respuestaProveedores = 0;
-        int contadorMenuProveedores = 0;
-
-        while (contadorMenuProveedores < 1) {
-            System.out.println("\n=== Menú de opciones ===");
-            System.out.println("1. Agregar proveedor");
-            System.out.println("2. Mostrar proveedores");
-            System.out.println("3. Eliminar proveedor");
-            System.out.println("4. Modificar proveedores");
-            System.out.print("Ingrese la opción deseada: ");
-
-            respuestaProveedores = leerint.nextInt();
-
-            if (respuestaProveedores == 1) {
-                agregarProveedores();
-            } else if (respuestaProveedores == 2) {
-                mostrarProveedores();
-            } else if (respuestaProveedores == 3) {
-                eliminarProveedores();
-            } else if (respuestaProveedores == 4) {
-                modificarProveedor();
-            } else if (respuestaProveedores == 5) {
-                contadorMenuProveedores++;
+    public void menuProveedoresDueno() throws IOException {
+        int respuestaduenoProveedores = 0;
+        do {
+            System.out.println("Que desea hacer con Proveedores?");
+            System.out.println("1. Anadir proveedores");
+            System.out.println("2. Eliminar proveedores");
+            System.out.println("3. Modificar proveedores");
+            System.out.println("4. Ver proveedores");
+            System.out.println("5.-Regresar al menu anterior");
+            respuestaduenoProveedores = leer.nextInt();
+            switch (respuestaduenoProveedores) {
+                case 1:
+                    agregarProveedores();
+                    break;
+                case 2:
+                    eliminarProveedores();
+                    break;
+                case 3:
+                    modificarProveedor();
+                    break;
+                case 4:
+                    mostrarProveedores();
+                    break;
+                case 5:
+                    menuDueno();
+                    break;
+                default:
+                    System.out.println("Opcion Invalida, ingresa una opcion valida");
             }
-        }
+        } while (respuestaduenoProveedores != 5);
 
     }
 
-   
 }

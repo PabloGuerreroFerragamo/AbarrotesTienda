@@ -40,10 +40,8 @@ class Mainer {
                 if (numProveedores < arregloProveedores.length) {
                     System.out.print("Ingrese el ID del proveedor: ");
                     String idProveedor = leer.nextLine();
-                    
                     System.out.print("Ingrese el nombre del proveedor: ");
                     String nombreProveedor = leer.nextLine();
-                    
                     System.out.print("Ingrese la empresa del proveedor: ");
                     String empresaProveedor = leer.nextLine();
 
