@@ -1,23 +1,16 @@
 package TiendaDeAbarrotes;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import tienda_de_abarrotes.TiendaArticulos;
 
 public class TiendaDeAbarrotes {//Daddy
-    Articulo llamador = new Articulo(1, "");
+    public static Articulo llamador = new Articulo(1, "");
     public static Scanner leer = new Scanner(System.in);
     int codigo; //Variable de tipo entera Publica llamada "codigo"
     String nombre;//Variable de tipo String Publica llamada "nombre"
@@ -27,7 +20,7 @@ public class TiendaDeAbarrotes {//Daddy
         this.nombre = Nombre;
     }
 
-    public void menuRoles() throws IOException {
+    static void menuRoles() throws IOException {
         int respuestaUser = 0;
         do {
             System.out.println("Bienvenido a la tienda de abarrotes");
@@ -50,7 +43,7 @@ public class TiendaDeAbarrotes {//Daddy
         } while (respuestaUser != 3);
     }
     
-    public void menuCliente() throws IOException {
+    static void menuCliente() throws IOException {
         int respuestaCliente = 0;
         leer.nextLine(); //Limpieza del buffer del scanner
         do {
@@ -59,7 +52,7 @@ public class TiendaDeAbarrotes {//Daddy
             respuestaCliente = leer.nextInt();
             switch (respuestaCliente) {
                 case 1:
-                    llamador.adquirirArticulos();
+                    adquirirArticulos();
                     break;
                 case 2:
                     llamador.verCarrito();
@@ -80,7 +73,7 @@ public class TiendaDeAbarrotes {//Daddy
         } while (respuestaCliente != 5);
     }
     
-    void menuDueno() throws IOException {
+    public static void menuDueno() throws IOException {
         Articulo llamandoArticulos = new Articulo(1, "");
         Proveedor llamandoProveedor = new Proveedor(1, "", "");
         int respuestaDueno = 0;
@@ -106,7 +99,7 @@ public class TiendaDeAbarrotes {//Daddy
         } while (respuestaDueno != 3);
     }
     
-    public void adquirirArticulos() throws IOException {
+    static void adquirirArticulos() throws IOException {
         String productoelegido = "";
         try {
             FileWriter crear = new FileWriter(llamador.archivoarticulos, true);
@@ -147,8 +140,7 @@ public class TiendaDeAbarrotes {//Daddy
     }
  
     public static void main(String[] args) throws IOException {
-        TiendaDeAbarrotes pene = new TiendaDeAbarrotes(1, "");
-        pene.menuRoles();
+        menuRoles();
     }
     
 }

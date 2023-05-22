@@ -8,10 +8,9 @@ import javax.swing.JOptionPane;
 
 public class Articulo extends TiendaDeAbarrotes {
 
-    TiendaDeAbarrotes llamandoTienda = new TiendaDeAbarrotes(1, "");
 
-    File archivocarrito = new File("Carrito.txt");
-    File archivoarticulos = new File("Articulos.txt");
+    public static File archivocarrito = new File("Carrito.txt");
+    public static File archivoarticulos = new File("Articulos.txt");
     double precio;//Variable de tipo Dobule Publica llamada "precio"
     int stock;
 
@@ -43,7 +42,7 @@ public class Articulo extends TiendaDeAbarrotes {
         return stock;
     }
 
-    public void adquirirArticulos() throws IOException {
+    static void adquirirArticulos() throws IOException {
         String productoelegido = "";
         try {
             FileWriter crear = new FileWriter(archivoarticulos, true);
@@ -83,7 +82,7 @@ public class Articulo extends TiendaDeAbarrotes {
 
     }
 
-    public void verCarrito() {
+    public static void verCarrito() {
         try {
             FileWriter crear = new FileWriter(archivocarrito, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivocarrito));
@@ -107,7 +106,7 @@ public class Articulo extends TiendaDeAbarrotes {
         }
     }
 
-    public void pagarCarrito() {
+    public static void pagarCarrito() {
 
     }
 
@@ -131,7 +130,7 @@ public class Articulo extends TiendaDeAbarrotes {
         mostrarArticulos();
     }
 
-    public void modificarArticulos() {
+    public static void modificarArticulos() {
         try {
             System.out.println("Introduce el código del artículo a modificar:");
             int codigoBuscado = leer.nextInt();
@@ -175,7 +174,7 @@ public class Articulo extends TiendaDeAbarrotes {
         }
     }
 
-    public void mostrarArticulos() {
+    public static void mostrarArticulos() {
         try {
             FileWriter crear = new FileWriter(archivoarticulos, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
@@ -194,7 +193,7 @@ public class Articulo extends TiendaDeAbarrotes {
 
     }
 
-    public void consultarArticulos() {
+    public static void consultarArticulos() {
         try {
             FileWriter crear = new FileWriter(archivoarticulos, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
@@ -218,7 +217,7 @@ public class Articulo extends TiendaDeAbarrotes {
 
     }
 
-    public void eliminarArticulos() {
+    public static void eliminarArticulos() {
 
     }
 
