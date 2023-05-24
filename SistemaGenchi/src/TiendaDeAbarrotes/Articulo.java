@@ -1,14 +1,15 @@
 package TiendaDeAbarrotes;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
 public class Articulo extends TiendaDeAbarrotes {
-
-
+    public static File archivoticket= new File ("Ticket.txt");
     public static File archivocarrito = new File("Carrito.txt");
     public static File archivoarticulos = new File("Articulos.txt");
     double precio;//Variable de tipo Dobule Publica llamada "precio"
@@ -98,7 +99,7 @@ public class Articulo extends TiendaDeAbarrotes {
             } else {
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
                     String[] partes = Arreglo[renglon].split(",");
-                    System.out.println("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + " Cantidad: ");
+                    System.out.println("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + " Cantidad: "+partes[3]+"\n");
                 }
             }
         } catch (IOException ex) {
@@ -107,7 +108,37 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public static void pagarCarrito() {
+        Date fecha=new Date();
+        SimpleDateFormat formatoFecha=new SimpleDateFormat("dd-MMMM-yyyy hh:mm:ss");
+        String fechaimprimir = formatoFecha.format(new Date());
+        double totalapagar=0;
+        try {
+            FileWriter creararchivoticket = new FileWriter(archivoticket, true);
+            BufferedReader brCablon = new BufferedReader(new FileReader(archivocarrito));
+            PrintWriter escribirarchivoticket = new PrintWriter(creararchivoticket);
+            String st;
+            Vector<String> v = new Vector(40);
+            for (int i = 0; (st = brCablon.readLine()) != null; i++) {
+                v.addElement(st);
+            }
+            String[] Arreglo = v.toArray(new String[v.size()]);
+            System.out.println("Productos en carrito a pagar: ");
+            for (int renglon = 0; Arreglo.length > renglon; renglon++) {
+                    String[] partes = Arreglo[renglon].split(",");
+                    escribirarchivoticket.print("\n"+"ABARROTES DON CRETACIO"+"\n");
+                    escribirarchivoticket.println(fechaimprimir+"\n");
+                    System.out.println("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + "$ Cantidad: "+partes[3]+"\n");
+                    escribirarchivoticket.print("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + "$ Cantidad: "+partes[3]+"\n");
+                    totalapagar+=(Double.parseDouble(partes[2])*Double.parseDouble(partes[3]));
+                    System.out.println("Total a pagar: "+totalapagar+"$");
+                }
+            escribirarchivoticket.print("Total a pagar: "+totalapagar+"$\n");
+            escribirarchivoticket.close();
+            creararchivoticket.close();
+            FileWriter borrar = new FileWriter(archivocarrito,false);
+        } catch (IOException ex) {
 
+        }
     }
 
     public void anadirArticulo() {
