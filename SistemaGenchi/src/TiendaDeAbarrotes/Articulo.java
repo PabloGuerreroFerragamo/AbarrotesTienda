@@ -218,7 +218,48 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public static void eliminarArticulos() {
+         try {
+        BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
+        ArrayList<String> lineas = new ArrayList<>();
 
+        String linea;
+        int codigoEliminar;
+
+        System.out.println("Introduce el código del artículo a eliminar:");
+        codigoEliminar = leer.nextInt();
+
+        boolean encontrado = false;
+
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(",");
+            int codigo = Integer.parseInt(partes[0]);
+
+            if (codigo == codigoEliminar) {
+                encontrado = true;
+                System.out.println("El siguiente artículo ha sido eliminado:");
+                System.out.println(linea);
+            } else {
+                lineas.add(linea);
+            }
+        }
+
+        br.close();
+
+        if (!encontrado) {
+            System.out.println("No se encontró ningún artículo con el código especificado.");
+        } else {
+            PrintWriter pw = new PrintWriter(new FileWriter("Articulos.txt"));
+
+            for (String articulo : lineas) {
+                pw.println(articulo);
+            }
+
+            pw.close();
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 
     public void menuArticulosDueno() throws IOException {
