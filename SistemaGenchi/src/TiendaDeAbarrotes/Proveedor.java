@@ -15,7 +15,7 @@ public class Proveedor extends TiendaDeAbarrotes {
     String empresaProveedor;
 
     Proveedor[] arregloProveedores = new Proveedor[100]; // Se puede cambiar el tamaño del arreglo según se necesite
-    int numProveedores = 0;
+    static int numProveedores = 0;
     int contadorProveedores = 0;
 
     public Proveedor(int Codigo, String Nombre, String Empresa) {
@@ -61,6 +61,7 @@ public class Proveedor extends TiendaDeAbarrotes {
     }
     
     void mostrarProveedores(){
+        System.out.println("---Proveedores Existentes---");
         try {
             FileWriter crear = new FileWriter(archivoProveedores, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));
@@ -201,12 +202,13 @@ public class Proveedor extends TiendaDeAbarrotes {
 
                 if (codigo == codigoBuscado) {
                     mostrarArticuloPorCodigo(codigo);
+                    selccionProveedor=empresaProveedor;
                 }
             }
 
             br.close();
 
-            FileWriter fw = new FileWriter(archivoProveedores, false);
+            FileWriter fw = new FileWriter(archivoProveedores, true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
@@ -216,7 +218,7 @@ public class Proveedor extends TiendaDeAbarrotes {
 
             pw.close();
 
-            System.out.println("El proveedor se ha modificado correctamente.");
+            System.out.println("El proveedor se ha seleccionado correctamente.");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -226,6 +228,7 @@ public class Proveedor extends TiendaDeAbarrotes {
     }
     
     public void mostrarArticuloPorCodigo(int codigo) {
+        
     try {
         BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
 
@@ -238,10 +241,11 @@ public class Proveedor extends TiendaDeAbarrotes {
 
             if (codigoArticulo == codigo) {
                 encontrado = true;
+                empresaProveedor=partes[2];
                 System.out.println("Proveedor encontrado:");
                 System.out.println("Código: " + partes[0]);
                 System.out.println("Nombre: " + partes[1]);
-                System.out.println("Precio: " + partes[2]);
+                System.out.println("Nombre de la empresa: " + partes[2]);
                 break;
             }
         }

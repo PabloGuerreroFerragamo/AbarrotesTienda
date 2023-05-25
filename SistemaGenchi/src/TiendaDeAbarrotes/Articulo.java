@@ -155,7 +155,7 @@ public class Articulo extends TiendaDeAbarrotes {
             pw.print("," + get(""));
             pw.print("," + get(1.0));
             pw.print("," + get(1, ""));
-            pw.print("," + provee.get("") + "\n");
+            pw.print("," + provee.get("",1)+ "\n");
 
             pw.close();
         } catch (Exception e) {

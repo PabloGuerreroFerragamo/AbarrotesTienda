@@ -1,5 +1,0 @@
-1,Cafe,12.0,80
-2,Leche,20.0,100
-3,Chocolate,10.0,30
-4,Galletas,17.0,50
-99,Lichis,25.0,100,
