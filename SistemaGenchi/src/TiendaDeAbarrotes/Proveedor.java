@@ -1,13 +1,15 @@
 package TiendaDeAbarrotes;
 
 import static TiendaDeAbarrotes.TiendaDeAbarrotes.leer;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+import javax.swing.JOptionPane;
 
 public class Proveedor extends TiendaDeAbarrotes {
 
     Scanner leerint = new Scanner(System.in);
     Scanner leer = new Scanner(System.in);
+    public static File archivoProveedores = new File("Proveedores.txt");
 
     //NOTA: Mediante estas 3 variables de abajo se accede a la informacion en especifico de cada objeto Proveedores
     String empresaProveedor;
@@ -18,114 +20,242 @@ public class Proveedor extends TiendaDeAbarrotes {
 
     public Proveedor(int Codigo, String Nombre, String Empresa) {
         super(Codigo, Nombre);
+        this.empresaProveedor = Empresa;
     }
 
+    int get(int Codi){
+        System.out.print("Ingrese el ID del proveedor: ");
+            codigo = leerint.nextInt();
+            return codigo;
+    }
+    
+    String get(String Nombre){
+        System.out.print("Ingrese el nombre del proveedor: ");
+        leer.nextLine();
+            nombre = leer.nextLine();
+            return nombre;
+    }
+    
+    String getEmpresa(){
+        System.out.print("Ingrese la empresa del proveedor: ");
+            empresaProveedor = leer.nextLine();
+            return empresaProveedor;
+    }
+    
     void agregarProveedores() {
-        //Y con estas variables se obtiene la informacion de cada proveedor
-        int codigoProveedorVolatil;
-        String nombreProveedorVolatil;
-        String empresaProveedorVolatil;
+        try {
 
-        if (numProveedores < arregloProveedores.length) {
-            System.out.print("Ingrese el ID del proveedor: ");
-            codigoProveedorVolatil = leerint.nextInt();
-
-            System.out.print("Ingrese el nombre del proveedor: ");
-            nombreProveedorVolatil = leer.nextLine();
-
-            System.out.print("Ingrese la empresa del proveedor: ");
-            empresaProveedorVolatil = leer.nextLine();
-
-            arregloProveedores[numProveedores] = new Proveedor(codigoProveedorVolatil, nombreProveedorVolatil, empresaProveedorVolatil);//Se crea un objeto de tipo Proveedor1, el cual pide como parametro 3 valores, los cuales se asignan a la posición numProveedores del arregloProveedores
+            FileWriter fw = new FileWriter("Proveedores.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.print(get(1));
+            pw.print("," + get(""));
+            pw.print("," + getEmpresa() + "\n");
             numProveedores++;
-            System.out.println("Proveedor agregado con éxito");
-        } else {
-            System.out.println("No se pueden agregar más proveedores, el límite ha sido alcanzado");
-        }
-    }
 
-    void mostrarProveedores() {
-        if (numProveedores > 0) {
-            System.out.println("\n=== Proveedores registrados ===");
-            for (int i = 0; i < numProveedores; i++) {//se repite el numero de proveedores que haya
-                System.out.println("ID: " + arregloProveedores[i].codigo + "\tNombre: " + arregloProveedores[i].nombre + "\tEmpresa: " + arregloProveedores[i].empresaProveedor);
+            pw.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        System.out.println("Proveedor agregado con éxito");
+    }
+    
+    void mostrarProveedores(){
+        try {
+            FileWriter crear = new FileWriter(archivoProveedores, true);
+            BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));
+            PrintWriter escribir = new PrintWriter(crear);
+            String st;
+            Vector<String> v = new Vector(40);
+            for (int i = 0; (st = brCablon.readLine()) != null; i++) {
+                v.addElement(st);
+
             }
-        } else {
-            System.out.println("No hay proveedores registrados");
+            String[] Arreglo = v.toArray(new String[v.size()]);
+            for (int x = 0; Arreglo.length > x; x++) {
+                System.out.println(Arreglo[x]);
+                if (x == Arreglo.length) {
+                    System.out.println("\n");
+                }
+            }
+
+        } catch (IOException e) {
         }
     }
+    
+    void eliminarProveedores(){
+        try {
+        BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));
+        ArrayList<String> lineas = new ArrayList<>();
 
-    void eliminarProveedores() {
-        if (numProveedores > 0) {
-            System.out.print("Ingrese el ID del proveedor a eliminar: ");
-            int idProveedorEliminar = leerint.nextInt();
+        String linea;
+        int codigoEliminar;
 
-            boolean proveedorEncontrado = false;
-            int posicionProveedorEliminar = -1;//almacenar la posición del proveedor que se desea eliminar en el arreglo de proveedores
+        System.out.println("Introduce el código del proveedor a eliminar:");
+        codigoEliminar = leer.nextInt();
 
-            for (int i = 0; i < numProveedores; i++) {//Se repite mientras i es menor al numero de proveedores existentes
-                if (arregloProveedores[i].codigo == idProveedorEliminar) {//si el codigo de proveedor del arreglo en la posicion de i, es igual al codigo a eliminar
-                    proveedorEncontrado = true;//si indica que ya se encontro
-                    posicionProveedorEliminar = i;//Se reconoce la posicion del arreglo a elimar
-                    break;//rompemos el ciclo for
-                }//cierre de if
-            }//cierre del ciclo for
+        boolean encontrado = false;
 
-            if (proveedorEncontrado == true) {//si se encontro el proveedor
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(",");
+            int codigo = Integer.parseInt(partes[0]);
 
-                for (int i = posicionProveedorEliminar; i < numProveedores - 1; i++) {
-                    arregloProveedores[i] = arregloProveedores[i + 1];
-                }
-                arregloProveedores[numProveedores - 1] = null;
+            if (codigo == codigoEliminar) {
+                encontrado = true;
+                System.out.println("El siguiente proveedor ha sido eliminado:");
+                System.out.println(linea);
                 numProveedores--;
-                System.out.println("Proveedor eliminado con éxito");
             } else {
-                System.out.println("No se encontró un proveedor con el ID proporcionado");
+                lineas.add(linea);
             }
-        } else {
-            System.out.println("No hay proveedores registrados");
         }
+
+        br.close();
+
+        if (!encontrado) {
+            System.out.println("No se encontró ningún proveedor con el código especificado.");
+        } else {
+            PrintWriter pw = new PrintWriter(new FileWriter(archivoProveedores));
+
+            for (String articulo : lineas) {
+                pw.println(articulo);
+            }
+
+            pw.close();
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
+    
+    void modificarProveedor(){
+        try {
+            System.out.println("Introduce el código del proveedor a modificar:");
+            int codigoBuscado = leer.nextInt();
+            leer.nextLine(); // Limpiar el buffer
+
+            List<String> lineas = new ArrayList<>();
+
+            BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                int codigo = Integer.parseInt(datos[0]);
+
+                if (codigo == codigoBuscado) {
+                    // Modificar el artículo
+                    System.out.println("Introduce el nuevo nombre del proveedor:");
+                    String nuevoNombre = leer.nextLine();
+                    System.out.println("Introduce el nuevo nombre de la empresa del proveedor:");
+                    String nuevoNombreEmpresa = leer.nextLine();
+                    linea = codigo + "," + nuevoNombre + "," + nuevoNombreEmpresa;
+                }
+                lineas.add(linea);
+            }
+
+            br.close();
+
+            FileWriter fw = new FileWriter(archivoProveedores, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            for (String line : lineas) {
+                pw.println(line);
+            }
+
+            pw.close();
+
+            System.out.println("El proveedor se ha modificado correctamente.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     }
 
-    void modificarProveedor() {
-        String nombreProveedorVolatil;
-        String empresaProveedorVolatil;
+    
+    String get(String lisboa, int popola) {
+        String selccionProveedor = "";
+
         if (numProveedores > 0) {
+            mostrarProveedores();
+        } else {
+            System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
+        }
+        try {
+            System.out.print("Ingrese el codigo del proveedor, que proporcionara este producto: ");
+            int codigoBuscado = leer.nextInt();
+            leer.nextLine(); // Limpiar el buffer
 
-            System.out.println("\n=== Proveedores registrados ===");
-            for (int i = 0; i < numProveedores; i++) {//se repite el numero de proveedores que haya
-                System.out.println("ID: " + arregloProveedores[i].codigo + "\tNombre: " + arregloProveedores[i].nombre + "\tEmpresa: " + arregloProveedores[i].empresaProveedor);
-            }
+            List<String> lineas = new ArrayList<>();
 
-            System.out.print("Ingrese el ID del proveedor a modificar: ");
-            int idProveedorModificar = leerint.nextInt();
+            BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                int codigo = Integer.parseInt(datos[0]);
+//            int codigoProveedor=leerint.nextInt();
 
-            int posicionProveedorModificar = -1;
-            for (int i = 0; i < numProveedores; i++) {
-                if (arregloProveedores[i].codigo == idProveedorModificar) {
-                    posicionProveedorModificar = i;
-                    break;
+                int posicionProveedor = -1;
+
+                if (codigo == codigoBuscado) {
+                    mostrarArticuloPorCodigo(codigo);
                 }
             }
 
-            if (posicionProveedorModificar != -1) {
-                System.out.print("Ingrese el nombre del proveedor: ");
-                nombreProveedorVolatil = leer.nextLine();
+            br.close();
 
-                System.out.print("Ingrese la empresa del proveedor: ");
-                empresaProveedorVolatil = leer.nextLine();
+            FileWriter fw = new FileWriter(archivoProveedores, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
 
-                arregloProveedores[posicionProveedorModificar].nombre = nombreProveedorVolatil;
-                arregloProveedores[posicionProveedorModificar].empresaProveedor = empresaProveedorVolatil;
-
-                System.out.println("Proveedor modificado con éxito");
-            } else {
-                System.out.println("No se encontró un proveedor con el ID proporcionado");
+            for (String line : lineas) {
+                pw.println(line);
             }
-        } else {
-            System.out.println("No hay proveedores registrados");
+
+            pw.close();
+
+            System.out.println("El proveedor se ha modificado correctamente.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
         }
+        return selccionProveedor;
     }
+    
+    public void mostrarArticuloPorCodigo(int codigo) {
+    try {
+        BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
+
+        String linea;
+        boolean encontrado = false;
+
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(",");
+            int codigoArticulo = Integer.parseInt(partes[0]);
+
+            if (codigoArticulo == codigo) {
+                encontrado = true;
+                System.out.println("Proveedor encontrado:");
+                System.out.println("Código: " + partes[0]);
+                System.out.println("Nombre: " + partes[1]);
+                System.out.println("Precio: " + partes[2]);
+                break;
+            }
+        }
+
+        br.close();
+
+        if (!encontrado) {
+            System.out.println("No se encontró ningún artículo con el código especificado.");
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
 
     public void menuProveedoresDueno() throws IOException {
         int respuestaduenoProveedores = 0;

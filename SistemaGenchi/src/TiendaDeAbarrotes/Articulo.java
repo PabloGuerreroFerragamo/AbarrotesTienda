@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
@@ -42,7 +43,7 @@ public class Articulo extends TiendaDeAbarrotes {
         stock = leer.nextInt();
         return stock;
     }
-
+    
     static void adquirirArticulos() throws IOException {
         String productoelegido = "";
         try {
@@ -142,6 +143,8 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public void anadirArticulo() {
+        Proveedor provee = new Proveedor(1, "", "");
+        if (provee.numProveedores > 0) {
 
         try {
 
@@ -151,7 +154,8 @@ public class Articulo extends TiendaDeAbarrotes {
             pw.print(get(1));
             pw.print("," + get(""));
             pw.print("," + get(1.0));
-            pw.print("," + get(1, "") + "\n");
+            pw.print("," + get(1, ""));
+            pw.print("," + provee.get("") + "\n");
 
             pw.close();
         } catch (Exception e) {
@@ -159,6 +163,9 @@ public class Articulo extends TiendaDeAbarrotes {
         }
         System.out.println("Se ha anadido el siguiente articulo al inventario:");
         mostrarArticulos();
+    }else{
+            System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
+        }
     }
 
     public static void modificarArticulos() {
