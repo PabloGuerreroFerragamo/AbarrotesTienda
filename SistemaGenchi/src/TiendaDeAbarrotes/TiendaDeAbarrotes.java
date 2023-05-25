@@ -77,6 +77,7 @@ public class TiendaDeAbarrotes {//Daddy
         Articulo llamandoArticulos = new Articulo(1, "");
         Proveedor llamandoProveedor = new Proveedor(1, "", "");
         int respuestaDueno = 0;
+        leer.nextLine(); //Limpieza del buffer del scanner
         do {
             System.out.println("Con que quieres trabajar?");
             System.out.println("1. Articulos");
@@ -101,12 +102,12 @@ public class TiendaDeAbarrotes {//Daddy
     
     static void adquirirArticulos() throws IOException {
         String productoelegido = "";
+        int cantidadproductoelegido = 0;
         try {
             FileWriter crear = new FileWriter(llamador.archivoarticulos, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(llamador.archivoarticulos));
             FileWriter creaarchivocarrito = new FileWriter(llamador.archivocarrito, false);//Para eliminar el archivo y crearlo en blanco, dejar en false
             PrintWriter escrituraarchivocarrito = new PrintWriter(creaarchivocarrito);
-            PrintWriter escribir = new PrintWriter(crear);
             String st;
             Vector<String> v = new Vector(40);
             for (int i = 0; (st = brCablon.readLine()) != null; i++) {
@@ -115,17 +116,21 @@ public class TiendaDeAbarrotes {//Daddy
             String[] Arreglo = v.toArray(new String[v.size()]);
             System.out.println("Articulos en venta:" + "\n");
             for (int x = 0; Arreglo.length > x; x++) {
-                System.out.println(Arreglo[x]);
+                String[] partesparamostrar = Arreglo[x].split(",");
+                System.out.println("Codigo: "+partesparamostrar[0]+"      Producto: "+partesparamostrar[1]+"        Precio: "+partesparamostrar[2]+"$         Stock: "+partesparamostrar[3]+"\n");
             }
-            leer.nextLine();
+            leer.nextLine();//limpieza del scanner
             do {
                 System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):" + "\n");
                 productoelegido = leer.nextLine();
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
-                    String[] partes = Arreglo[renglon].split(",");
-                    if (partes[1].equalsIgnoreCase(productoelegido)) {
-                        escrituraarchivocarrito.print(Arreglo[renglon] + "\n");
-                        System.out.println("Producto " + partes[1] + " agregado al carrito" + "\n");
+                    String[] partesparaescritura = Arreglo[renglon].split(",");
+                    if (partesparaescritura[1].equalsIgnoreCase(productoelegido)) {
+                        System.out.println("Cuanto(s) "+productoelegido +"(s)"+" desea comprar?");
+                        cantidadproductoelegido=leer.nextInt();
+                        escrituraarchivocarrito.print(partesparaescritura[0]+","+partesparaescritura[1]+","+partesparaescritura[2]+","+cantidadproductoelegido+ "\n");
+                        System.out.println(cantidadproductoelegido +" "+partesparaescritura[1]+"(s)"+ " agregado(s) al carrito" + "\n");
+                        renglon=Arreglo.length+1;
                     }
                 }
             } while (!(productoelegido.equalsIgnoreCase("x")));

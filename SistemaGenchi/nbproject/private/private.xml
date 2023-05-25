@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+<<<<<<< HEAD
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Cursos/Java/EstaCarpetaEsImportante/SistemaGenchi/src/TiendaDeAbarrotes/Proveedor.java</file>
@@ -8,4 +9,6 @@
             <file>file:/C:/Cursos/Java/EstaCarpetaEsImportante/SistemaGenchi/src/TiendaDeAbarrotes/TiendaDeAbarrotes.java</file>
         </group>
     </open-files>
+=======
+>>>>>>> ddb43189beb3ff3edaa7e05dd18eaf87b90b7797
 </project-private>
