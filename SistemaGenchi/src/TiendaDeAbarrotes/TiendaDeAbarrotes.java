@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 public class TiendaDeAbarrotes {//Daddy
+
     public static Articulo llamador = new Articulo(1, "");
     public static Scanner leer = new Scanner(System.in);
     int codigo; //Variable de tipo entera Publica llamada "codigo"
@@ -23,7 +24,7 @@ public class TiendaDeAbarrotes {//Daddy
     static void menuRoles() throws IOException {
         int respuestaUser = 0;
         do {
-            System.out.println("Bienvenido a la tienda de abarrotes");
+            System.out.println("Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
             System.out.println("1.- Soy un cliente    2.-Soy el dueno   3.-Salir del sistema");
             respuestaUser = leer.nextInt();
             switch (respuestaUser) {
@@ -42,17 +43,17 @@ public class TiendaDeAbarrotes {//Daddy
             }
         } while (respuestaUser != 3);
     }
-    
+
     static void menuCliente() throws IOException {
         int respuestaCliente = 0;
         leer.nextLine(); //Limpieza del buffer del scanner
         do {
-            System.out.println("Que deseas hacer?");
+            System.out.println("Que deseas hacer?_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
             System.out.println("1.-Adquirir articulos     2.-Ver carrito     3.-Pagar carrito       4.- Regresar al menu anterior   5.-Salir del sistema");
             respuestaCliente = leer.nextInt();
             switch (respuestaCliente) {
                 case 1:
-                    adquirirArticulos();
+                    llamador.adquirirArticulos();
                     break;
                 case 2:
                     llamador.verCarrito();
@@ -72,14 +73,14 @@ public class TiendaDeAbarrotes {//Daddy
             }
         } while (respuestaCliente != 5);
     }
-    
+
     public static void menuDueno() throws IOException {
         Articulo llamandoArticulos = new Articulo(1, "");
         Proveedor llamandoProveedor = new Proveedor(1, "", "");
         int respuestaDueno = 0;
         leer.nextLine(); //Limpieza del buffer del scanner
         do {
-            System.out.println("Con que quieres trabajar?");
+            System.out.println("Con que quieres trabajar?_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
             System.out.println("1. Articulos");
             System.out.println("2. Proveedor");
             System.out.println("3.-Regresar al menu Anterior");
@@ -99,7 +100,7 @@ public class TiendaDeAbarrotes {//Daddy
             }
         } while (respuestaDueno != 3);
     }
-    
+
     static void adquirirArticulos() throws IOException {
         String productoelegido = "";
         int cantidadproductoelegido = 0;
@@ -114,23 +115,23 @@ public class TiendaDeAbarrotes {//Daddy
                 v.addElement(st);
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
-            System.out.println("Articulos en venta:" + "\n");
+            System.out.println("Articulos en venta:_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n");
             for (int x = 0; Arreglo.length > x; x++) {
                 String[] partesparamostrar = Arreglo[x].split(",");
-                System.out.println("Codigo: "+partesparamostrar[0]+"      Producto: "+partesparamostrar[1]+"        Precio: "+partesparamostrar[2]+"$         Stock: "+partesparamostrar[3]+"\n");
+                System.out.println("Codigo: " + partesparamostrar[0] + "      Producto: " + partesparamostrar[1] + "        Precio: " + partesparamostrar[2] + "$         Stock: " + partesparamostrar[3] + "\n");
             }
             leer.nextLine();//limpieza del scanner
             do {
-                System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):" + "\n");
+                System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n");
                 productoelegido = leer.nextLine();
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
                     String[] partesparaescritura = Arreglo[renglon].split(",");
                     if (partesparaescritura[1].equalsIgnoreCase(productoelegido)) {
-                        System.out.println("Cuanto(s) "+productoelegido +"(s)"+" desea comprar?");
-                        cantidadproductoelegido=leer.nextInt();
-                        escrituraarchivocarrito.print(partesparaescritura[0]+","+partesparaescritura[1]+","+partesparaescritura[2]+","+cantidadproductoelegido+ "\n");
-                        System.out.println(cantidadproductoelegido +" "+partesparaescritura[1]+"(s)"+ " agregado(s) al carrito" + "\n");
-                        renglon=Arreglo.length+1;
+                        System.out.println("Cuanto(s) " + productoelegido + "(s)" + " desea comprar?");
+                        cantidadproductoelegido = leer.nextInt();
+                        escrituraarchivocarrito.print(partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + cantidadproductoelegido + "\n");
+                        System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
+                        renglon = Arreglo.length + 1;
                     }
                 }
             } while (!(productoelegido.equalsIgnoreCase("x")));
@@ -143,10 +144,9 @@ public class TiendaDeAbarrotes {//Daddy
         }
 
     }
- 
+
     public static void main(String[] args) throws IOException {
         menuRoles();
     }
-    
-}
 
+}

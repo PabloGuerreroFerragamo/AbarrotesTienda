@@ -23,25 +23,25 @@ public class Proveedor extends TiendaDeAbarrotes {
         this.empresaProveedor = Empresa;
     }
 
-    int get(int Codi){
+    int get(int Codi) {
         System.out.print("Ingrese el ID del proveedor: ");
-            codigo = leerint.nextInt();
-            return codigo;
+        codigo = leerint.nextInt();
+        return codigo;
     }
-    
-    String get(String Nombre){
+
+    String get(String Nombre) {
         System.out.print("Ingrese el nombre del proveedor: ");
         leer.nextLine();
-            nombre = leer.nextLine();
-            return nombre;
+        nombre = leer.nextLine();
+        return nombre;
     }
-    
-    String getEmpresa(){
+
+    String getEmpresa() {
         System.out.print("Ingrese la empresa del proveedor: ");
-            empresaProveedor = leer.nextLine();
-            return empresaProveedor;
+        empresaProveedor = leer.nextLine();
+        return empresaProveedor;
     }
-    
+
     void agregarProveedores() {
         try {
 
@@ -59,8 +59,8 @@ public class Proveedor extends TiendaDeAbarrotes {
         }
         System.out.println("Proveedor agregado con éxito");
     }
-    
-    void mostrarProveedores(){
+
+    void mostrarProveedores() {
         System.out.println("---Proveedores Existentes---");
         try {
             FileWriter crear = new FileWriter(archivoProveedores, true);
@@ -70,67 +70,69 @@ public class Proveedor extends TiendaDeAbarrotes {
             Vector<String> v = new Vector(40);
             for (int i = 0; (st = brCablon.readLine()) != null; i++) {
                 v.addElement(st);
-
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
-            for (int x = 0; Arreglo.length > x; x++) {
-                System.out.println(Arreglo[x]);
-                if (x == Arreglo.length) {
-                    System.out.println("\n");
+            if (archivoProveedores.length() == 0) {
+                System.out.println("No has agregado proveedores aun");
+            } else {
+                for (int renglon = 0; Arreglo.length > renglon; renglon++) {
+                    String[] partesparamostrar = Arreglo[renglon].split(",");
+                    System.out.println("\nID del Proveedor: " + partesparamostrar[0] + "    Nombre del proveedor: " + partesparamostrar[1] + "    Empresa del proveedor: " + partesparamostrar[2]);
                 }
             }
+            System.out.println();
 
         } catch (IOException e) {
         }
     }
-    
-    void eliminarProveedores(){
+
+    void eliminarProveedores() {
         try {
-        BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));
-        ArrayList<String> lineas = new ArrayList<>();
+            BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));
+            ArrayList<String> lineas = new ArrayList<>();
 
-        String linea;
-        int codigoEliminar;
+            String linea;
+            int codigoEliminar;
 
-        System.out.println("Introduce el código del proveedor a eliminar:");
-        codigoEliminar = leer.nextInt();
+            System.out.println("Introduce el código del proveedor a eliminar:");
+            codigoEliminar = leer.nextInt();
 
-        boolean encontrado = false;
+            boolean encontrado = false;
 
-        while ((linea = br.readLine()) != null) {
-            String[] partes = linea.split(",");
-            int codigo = Integer.parseInt(partes[0]);
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(",");
+                int codigo = Integer.parseInt(partes[0]);
 
-            if (codigo == codigoEliminar) {
-                encontrado = true;
-                System.out.println("El siguiente proveedor ha sido eliminado:");
-                System.out.println(linea);
-                numProveedores--;
+                if (codigo == codigoEliminar) {
+                    encontrado = true;
+                    System.out.println("El siguiente proveedor ha sido eliminado:");
+                    System.out.println(linea);
+                    numProveedores--;
+                } else {
+                    lineas.add(linea);
+                }
+            }
+
+            br.close();
+
+            if (!encontrado) {
+                System.out.println("No se encontró ningún proveedor con el código especificado.");
             } else {
-                lineas.add(linea);
-            }
-        }
+                PrintWriter pw = new PrintWriter(new FileWriter(archivoProveedores));
 
-        br.close();
+                for (String articulo : lineas) {
+                    pw.println(articulo);
+                }
 
-        if (!encontrado) {
-            System.out.println("No se encontró ningún proveedor con el código especificado.");
-        } else {
-            PrintWriter pw = new PrintWriter(new FileWriter(archivoProveedores));
-
-            for (String articulo : lineas) {
-                pw.println(articulo);
+                pw.close();
             }
 
-            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    }
-    
-    void modificarProveedor(){
+    void modificarProveedor() {
         try {
             System.out.println("Introduce el código del proveedor a modificar:");
             int codigoBuscado = leer.nextInt();
@@ -172,10 +174,9 @@ public class Proveedor extends TiendaDeAbarrotes {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
     }
 
-    
     String get(String lisboa, int popola) {
         String selccionProveedor = "";
 
@@ -202,7 +203,7 @@ public class Proveedor extends TiendaDeAbarrotes {
 
                 if (codigo == codigoBuscado) {
                     mostrarArticuloPorCodigo(codigo);
-                    selccionProveedor=empresaProveedor;
+                    selccionProveedor = empresaProveedor;
                 }
             }
 
@@ -226,40 +227,40 @@ public class Proveedor extends TiendaDeAbarrotes {
         }
         return selccionProveedor;
     }
-    
+
     public void mostrarArticuloPorCodigo(int codigo) {
-        
-    try {
-        BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
 
-        String linea;
-        boolean encontrado = false;
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
 
-        while ((linea = br.readLine()) != null) {
-            String[] partes = linea.split(",");
-            int codigoArticulo = Integer.parseInt(partes[0]);
+            String linea;
+            boolean encontrado = false;
 
-            if (codigoArticulo == codigo) {
-                encontrado = true;
-                empresaProveedor=partes[2];
-                System.out.println("Proveedor encontrado:");
-                System.out.println("Código: " + partes[0]);
-                System.out.println("Nombre: " + partes[1]);
-                System.out.println("Nombre de la empresa: " + partes[2]);
-                break;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(",");
+                int codigoArticulo = Integer.parseInt(partes[0]);
+
+                if (codigoArticulo == codigo) {
+                    encontrado = true;
+                    empresaProveedor = partes[2];
+                    System.out.println("Proveedor encontrado:");
+                    System.out.println("Código: " + partes[0]);
+                    System.out.println("Nombre: " + partes[1]);
+                    System.out.println("Nombre de la empresa: " + partes[2]);
+                    break;
+                }
             }
+
+            br.close();
+
+            if (!encontrado) {
+                System.out.println("No se encontró ningún artículo con el código especificado.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        br.close();
-
-        if (!encontrado) {
-            System.out.println("No se encontró ningún artículo con el código especificado.");
-        }
-
-    } catch (IOException e) {
-        e.printStackTrace();
     }
-}
 
     public void menuProveedoresDueno() throws IOException {
         int respuestaduenoProveedores = 0;

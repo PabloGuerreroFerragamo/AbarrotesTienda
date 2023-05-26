@@ -13,6 +13,7 @@ public class Articulo extends TiendaDeAbarrotes {
     public static File archivoticket= new File ("Ticket.txt");
     public static File archivocarrito = new File("Carrito.txt");
     public static File archivoarticulos = new File("Articulos.txt");
+    public static File archivoproveedores = new File("Proveedores.txt");
     double precio;//Variable de tipo Dobule Publica llamada "precio"
     int stock;
 
@@ -21,6 +22,7 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public int get(int Codigo) {
+        leer.nextLine();
         System.out.println("Introduce el codigo del nuevo producto:");
         codigo = leer.nextInt();
         return codigo;
@@ -45,13 +47,14 @@ public class Articulo extends TiendaDeAbarrotes {
     }
     
     static void adquirirArticulos() throws IOException {
-        String productoelegido = "";
+        String productoelegido = "",copiarenglon="";
         int cantidadproductoelegido = 0, stockdisponiblearticuloelegido = 0,respuesta = 0;
         try {
-            FileWriter crear = new FileWriter(llamador.archivoarticulos, true);
-            BufferedReader brCablon = new BufferedReader(new FileReader(llamador.archivoarticulos));
-            FileWriter creaarchivocarrito = new FileWriter(llamador.archivocarrito, false);//Para eliminar el archivo y crearlo en blanco, dejar en false
+            FileWriter creararchivoarticulos = new FileWriter(archivoarticulos, true);
+            FileWriter creaarchivocarrito = new FileWriter(archivocarrito, false);//Para eliminar el archivo y crearlo en blanco, dejar en false
+            BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
             PrintWriter escrituraarchivocarrito = new PrintWriter(creaarchivocarrito);
+            PrintWriter escrituraarchivoarticulos = new PrintWriter(creararchivoarticulos);
             String st;
             Vector<String> v = new Vector(40);
             for (int i = 0; (st = brCablon.readLine()) != null; i++) {
@@ -68,26 +71,54 @@ public class Articulo extends TiendaDeAbarrotes {
                 System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):" + "\n");
                 productoelegido = leer.nextLine();
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
+                    copiarenglon=Arreglo[renglon];
                     String[] partesparaescritura = Arreglo[renglon].split(",");
                     if (partesparaescritura[1].equalsIgnoreCase(productoelegido)) {
                         stockdisponiblearticuloelegido=Integer.parseInt(partesparaescritura[3]);
                         System.out.println("Cuanto(s) " + productoelegido + "(s)" + " desea comprar?");
                         cantidadproductoelegido = leer.nextInt();
                         if (cantidadproductoelegido < stockdisponiblearticuloelegido) {
-                            escrituraarchivocarrito.print(partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + cantidadproductoelegido + "\n");
-                            System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
-                            renglon = Arreglo.length + 1;
-                        } else if (cantidadproductoelegido == stockdisponiblearticuloelegido) {
                             System.out.println("Esta seguro de adquirir "+cantidadproductoelegido+" "+productoelegido+"(s)?:");
                             System.out.println("1.- Si      2.-No");
+                            respuesta=leer.nextInt();
                             switch(respuesta){
                                 case 1:
+                                    FileWriter flasheararchivoarticulos = new FileWriter(archivoarticulos,false);
                                     escrituraarchivocarrito.print(partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + cantidadproductoelegido + "\n");
+                                    if(copiarenglon.equals(Arreglo[renglon])){
+                                        Arreglo[renglon]=(partesparaescritura[0]+","+partesparaescritura[1]+","+partesparaescritura[2]+","+(Integer.parseInt(partesparaescritura[3])-cantidadproductoelegido)+","+partesparaescritura[4]);
+                                        for(int r=0;Arreglo.length>r;r++){
+                                            escrituraarchivoarticulos.print(Arreglo[renglon]);
+                                        }
+                                        escrituraarchivoarticulos.println();
+                                    }
                             System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
                             renglon = Arreglo.length + 1;
                                     break;
                                 case 2:
-                                    
+                                    adquirirArticulos();
+                                    break;
+                            }
+                        } else if (cantidadproductoelegido == stockdisponiblearticuloelegido) {
+                            System.out.println("Esta seguro de adquirir "+cantidadproductoelegido+" "+productoelegido+"(s)?:");
+                            System.out.println("1.- Si      2.-No");
+                            respuesta=leer.nextInt();
+                            switch(respuesta){
+                                case 1:
+                                    FileWriter flasheararchivoarticulos = new FileWriter(archivoarticulos,false);
+                                    escrituraarchivocarrito.print(partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + cantidadproductoelegido + "\n");
+                                    if(copiarenglon.equals(Arreglo[renglon])){
+                                        Arreglo[renglon]=(partesparaescritura[0]+","+partesparaescritura[1]+","+partesparaescritura[2]+","+(Integer.parseInt(partesparaescritura[3])-cantidadproductoelegido)+","+partesparaescritura[4]);
+                                        for(int r=0;Arreglo.length>r;r++){
+                                            escrituraarchivoarticulos.print(Arreglo[renglon]);
+                                        }
+                                        escrituraarchivoarticulos.println();
+                                    }
+                            System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
+                            renglon = Arreglo.length + 1;
+                                    break;
+                                case 2:
+                                    adquirirArticulos();
                                     break;
                                 default:
                                     System.out.println("Opcion invalida, intenta de nuevo: ");
@@ -98,7 +129,9 @@ public class Articulo extends TiendaDeAbarrotes {
             } while (!(productoelegido.equalsIgnoreCase("x")));
             System.out.println("Has dejado de comprar");
             escrituraarchivocarrito.close();
+            escrituraarchivoarticulos.close();
             creaarchivocarrito.close();
+            creararchivoarticulos.close();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
@@ -158,7 +191,7 @@ public class Articulo extends TiendaDeAbarrotes {
             escribirarchivoticket.print("Total a pagar: "+totalapagar+"$\n");
             escribirarchivoticket.close();
             creararchivoticket.close();
-            FileWriter borrar = new FileWriter(archivocarrito,false);
+            FileWriter borrararchivocarrito = new FileWriter(archivocarrito,false);
         } catch (IOException ex) {
 
         }
@@ -166,7 +199,7 @@ public class Articulo extends TiendaDeAbarrotes {
 
     public void anadirArticulo() {
         Proveedor provee = new Proveedor(1, "", "");
-        if (provee.numProveedores > 0) {
+        if (provee.numProveedores > 0||archivoproveedores.length()!=0) {
 
         try {
 
@@ -325,6 +358,7 @@ public class Articulo extends TiendaDeAbarrotes {
     public void menuArticulosDueno() throws IOException {
         int respuestaduenoArticulos = 0;
         do {
+            leer.nextLine();
             System.out.println("Que desea hacer con Articulos?");
             System.out.println("1. Anadir articulos");
             System.out.println("2. Eliminar articulos");
