@@ -1,6 +1,5 @@
 package TiendaDeAbarrotes;
 
-import static TiendaDeAbarrotes.TiendaDeAbarrotes.leer;
 import java.io.*;
 import java.util.*;
 import javax.swing.JOptionPane;
@@ -61,7 +60,7 @@ public class Proveedor extends TiendaDeAbarrotes {
     }
 
     void mostrarProveedores() {
-        System.out.println("---Proveedores Existentes---");
+        System.out.println(ANSI_GREEN+"_-_-_-_-_-_-_-_-_Proveedores Existentes_-_-_-_-_-_-_-_-_");
         try {
             FileWriter crear = new FileWriter(archivoProveedores, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));
@@ -72,7 +71,7 @@ public class Proveedor extends TiendaDeAbarrotes {
                 v.addElement(st);
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
-            if (archivoProveedores.length() == 0) {
+            if (!(archivoProveedores.exists())||archivoProveedores.length() == 0) {
                 System.out.println("No has agregado proveedores aun");
             } else {
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
@@ -180,10 +179,10 @@ public class Proveedor extends TiendaDeAbarrotes {
     String get(String lisboa, int popola) {
         String selccionProveedor = "";
 
-        if (numProveedores > 0) {
-            mostrarProveedores();
-        } else {
+        if (!(archivoProveedores.exists())||archivoProveedores.length()==0) {
             System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
+        } else {
+            mostrarProveedores();
         }
         try {
             System.out.print("Ingrese el codigo del proveedor, que proporcionara este producto: ");
@@ -265,7 +264,7 @@ public class Proveedor extends TiendaDeAbarrotes {
     public void menuProveedoresDueno() throws IOException {
         int respuestaduenoProveedores = 0;
         do {
-            System.out.println("Que desea hacer con Proveedores?");
+            System.out.println(ANSI_GREEN+"Que desea hacer con Proveedores?_-_-_-_-_-_-_-_-_-_-_-_-_-_-         "+"#Dueno#" + ANSI_GREEN);
             System.out.println("1. Anadir proveedores");
             System.out.println("2. Eliminar proveedores");
             System.out.println("3. Modificar proveedores");

@@ -11,6 +11,24 @@ import javax.swing.JOptionPane;
 
 public class TiendaDeAbarrotes {//Daddy
 
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
+    public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
+    public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
+    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
+    public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
+    public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
+    public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+    public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
+
     public static Articulo llamador = new Articulo(1, "");
     public static Scanner leer = new Scanner(System.in);
     int codigo; //Variable de tipo entera Publica llamada "codigo"
@@ -24,7 +42,7 @@ public class TiendaDeAbarrotes {//Daddy
     static void menuRoles() throws IOException {
         int respuestaUser = 0;
         do {
-            System.out.println("Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
+            System.out.println(ANSI_RESET + "Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
             System.out.println("1.- Soy un cliente    2.-Soy el dueno   3.-Salir del sistema");
             respuestaUser = leer.nextInt();
             switch (respuestaUser) {
@@ -46,9 +64,9 @@ public class TiendaDeAbarrotes {//Daddy
 
     static void menuCliente() throws IOException {
         int respuestaCliente = 0;
-        leer.nextLine(); //Limpieza del buffer del scanner
         do {
-            System.out.println("Que deseas hacer?_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
+            //leer.nextLine(); //Limpieza del buffer del scanner
+            System.out.println(ANSI_PURPLE + "Que deseas hacer?_-_-_-_-_-_-_-_-_-_-_-_-_-_-       " + "#Cliente#" + ANSI_PURPLE);
             System.out.println("1.-Adquirir articulos     2.-Ver carrito     3.-Pagar carrito       4.- Regresar al menu anterior   5.-Salir del sistema");
             respuestaCliente = leer.nextInt();
             switch (respuestaCliente) {
@@ -80,7 +98,7 @@ public class TiendaDeAbarrotes {//Daddy
         int respuestaDueno = 0;
         leer.nextLine(); //Limpieza del buffer del scanner
         do {
-            System.out.println("Con que quieres trabajar?_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
+            System.out.println(ANSI_GREEN + "Con que quieres trabajar?_-_-_-_-_-_-_-_-_-_-_-_-_-_-       " + "#Dueno#" + ANSI_GREEN);
             System.out.println("1. Articulos");
             System.out.println("2. Proveedor");
             System.out.println("3.-Regresar al menu Anterior");
@@ -101,49 +119,6 @@ public class TiendaDeAbarrotes {//Daddy
         } while (respuestaDueno != 3);
     }
 
-    static void adquirirArticulos() throws IOException {
-        String productoelegido = "";
-        int cantidadproductoelegido = 0;
-        try {
-            FileWriter crear = new FileWriter(llamador.archivoarticulos, true);
-            BufferedReader brCablon = new BufferedReader(new FileReader(llamador.archivoarticulos));
-            FileWriter creaarchivocarrito = new FileWriter(llamador.archivocarrito, false);//Para eliminar el archivo y crearlo en blanco, dejar en false
-            PrintWriter escrituraarchivocarrito = new PrintWriter(creaarchivocarrito);
-            String st;
-            Vector<String> v = new Vector(40);
-            for (int i = 0; (st = brCablon.readLine()) != null; i++) {
-                v.addElement(st);
-            }
-            String[] Arreglo = v.toArray(new String[v.size()]);
-            System.out.println("Articulos en venta:_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n");
-            for (int x = 0; Arreglo.length > x; x++) {
-                String[] partesparamostrar = Arreglo[x].split(",");
-                System.out.println("Codigo: " + partesparamostrar[0] + "      Producto: " + partesparamostrar[1] + "        Precio: " + partesparamostrar[2] + "$         Stock: " + partesparamostrar[3] + "\n");
-            }
-            leer.nextLine();//limpieza del scanner
-            do {
-                System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n");
-                productoelegido = leer.nextLine();
-                for (int renglon = 0; Arreglo.length > renglon; renglon++) {
-                    String[] partesparaescritura = Arreglo[renglon].split(",");
-                    if (partesparaescritura[1].equalsIgnoreCase(productoelegido)) {
-                        System.out.println("Cuanto(s) " + productoelegido + "(s)" + " desea comprar?");
-                        cantidadproductoelegido = leer.nextInt();
-                        escrituraarchivocarrito.print(partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + cantidadproductoelegido + "\n");
-                        System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
-                        renglon = Arreglo.length + 1;
-                    }
-                }
-            } while (!(productoelegido.equalsIgnoreCase("x")));
-            System.out.println("Has dejado de comprar");
-            escrituraarchivocarrito.close();
-            creaarchivocarrito.close();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-
-    }
 
     public static void main(String[] args) throws IOException {
         menuRoles();
