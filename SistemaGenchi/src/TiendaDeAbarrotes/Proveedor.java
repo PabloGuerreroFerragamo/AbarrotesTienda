@@ -13,6 +13,8 @@ public class Proveedor extends TiendaDeAbarrotes {
 
     //NOTA: Mediante estas 3 variables de abajo se accede a la informacion en especifico de cada objeto Proveedores
     String empresaProveedor;
+    String ubicacionProveedor;
+    String correoElectronico;
 
     Proveedor[] arregloProveedores = new Proveedor[100]; // Se puede cambiar el tamaño del arreglo según se necesite
     static int numProveedores = 0;
@@ -42,6 +44,18 @@ public class Proveedor extends TiendaDeAbarrotes {
             return empresaProveedor;
     }
     
+    String getCorreoE(){
+        System.out.print("Ingrese el correo electronico del proveedor: ");
+            correoElectronico = leer.nextLine();
+            return correoElectronico;
+    }
+    
+    String getUbicacion(){
+        System.out.print("Ingrese la ubicacion del proveedor: ");
+            ubicacionProveedor = leer.nextLine();
+            return ubicacionProveedor;
+    }
+    
     void agregarProveedores() {
         try {
 
@@ -50,7 +64,9 @@ public class Proveedor extends TiendaDeAbarrotes {
             PrintWriter pw = new PrintWriter(bw);
             pw.print(get(1));
             pw.print("," + get(""));
-            pw.print("," + getEmpresa() + "\n");
+            pw.print("," + getEmpresa());
+            pw.print("," + getCorreoE());
+            pw.print("," + getUbicacion() + "\n");
             numProveedores++;
 
             pw.close();
@@ -82,6 +98,7 @@ public class Proveedor extends TiendaDeAbarrotes {
 
         } catch (IOException e) {
         }
+        System.out.println("");
     }
     
     void eliminarProveedores(){
@@ -91,6 +108,8 @@ public class Proveedor extends TiendaDeAbarrotes {
 
         String linea;
         int codigoEliminar;
+        
+        mostrarProveedores();
 
         System.out.println("Introduce el código del proveedor a eliminar:");
         codigoEliminar = leer.nextInt();
@@ -114,7 +133,7 @@ public class Proveedor extends TiendaDeAbarrotes {
         br.close();
 
         if (!encontrado) {
-            System.out.println("No se encontró ningún proveedor con el código especificado.");
+            System.out.println("No se encontró ningún proveedor con el código especificado");
         } else {
             PrintWriter pw = new PrintWriter(new FileWriter(archivoProveedores));
 
@@ -131,6 +150,14 @@ public class Proveedor extends TiendaDeAbarrotes {
     }
     
     void modificarProveedor(){
+        String nuevoNombre;
+        String nuevoNombreEmpresa;
+        String nuevaUbi;
+        String nuevoCorreo;
+        int elSwichNoSirve=0;
+        
+        mostrarProveedores();
+        
         try {
             System.out.println("Introduce el código del proveedor a modificar:");
             int codigoBuscado = leer.nextInt();
@@ -147,10 +174,18 @@ public class Proveedor extends TiendaDeAbarrotes {
                 if (codigo == codigoBuscado) {
                     // Modificar el artículo
                     System.out.println("Introduce el nuevo nombre del proveedor:");
-                    String nuevoNombre = leer.nextLine();
+                    nuevoNombre = leer.nextLine();
                     System.out.println("Introduce el nuevo nombre de la empresa del proveedor:");
-                    String nuevoNombreEmpresa = leer.nextLine();
-                    linea = codigo + "," + nuevoNombre + "," + nuevoNombreEmpresa;
+                    nuevoNombreEmpresa = leer.nextLine();
+                    System.out.println("Ingrese la ubicacion del proveedor: ");
+                    nuevaUbi = leer.nextLine();
+                    System.out.println("Ingrese el correo electronico del proveedor: ");
+                    nuevoCorreo = leer.nextLine();
+                    linea = codigo + "," + nuevoNombre + "," + nuevoNombreEmpresa + "," + nuevaUbi + "," + nuevoCorreo;
+                }
+                else{
+                    System.out.println("No se encontró ningún proveedor con el código especificado");
+                    elSwichNoSirve++;
                 }
                 lineas.add(linea);
             }
@@ -166,13 +201,16 @@ public class Proveedor extends TiendaDeAbarrotes {
             }
 
             pw.close();
-
-            System.out.println("El proveedor se ha modificado correctamente.");
+            
+            if(elSwichNoSirve!=1){
+                System.out.println("El proveedor se ha modificado correctamente.");
+            }
+            
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+        elSwichNoSirve=0;
     }
 
     
