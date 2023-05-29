@@ -14,11 +14,8 @@ public class Articulo extends TiendaDeAbarrotes {
     public static File archivocarrito = new File("Carrito.txt");
     public static File archivoarticulos = new File("Articulos.txt");
     public static File archivoproveedores = new File("Proveedores.txt");
-<<<<<<< HEAD
     public static File archivoventafinal = new File("VentaFinal.txt");
-=======
     Proveedor provee = new Proveedor(1, "", "");
->>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
     double precio;//Variable de tipo Dobule Publica llamada "precio"
     int stock;
 
@@ -102,8 +99,7 @@ public class Articulo extends TiendaDeAbarrotes {
                                     escrituraarchivocarrito.print(partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + cantidadproductoelegido + "\n");
                                     if (copiarenglon.equals(Arreglo[renglon])) {
                                         Arreglo[renglon] = (partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + (Integer.parseInt(partesparaescritura[3]) - cantidadproductoelegido) + "," + partesparaescritura[4]);
-                                        
-                                        
+
                                     }
                                     System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
                                     break;
@@ -117,8 +113,8 @@ public class Articulo extends TiendaDeAbarrotes {
             } while (!(productoelegido.equalsIgnoreCase("x")));
             System.out.println("Has dejado de comprar");
             for (int r = 0; Arreglo.length > r; r++) {
-                                            escrituraarchivoarticulos.println(Arreglo[r]);
-                                        }
+                escrituraarchivoarticulos.println(Arreglo[r]);
+            }
             escrituraarchivocarrito.close();
             escrituraarchivoarticulos.close();
             creaarchivocarrito.close();
@@ -194,39 +190,22 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public void anadirArticulo() {
-<<<<<<< HEAD
-        Proveedor provee = new Proveedor(1, "", "");
         if (provee.numProveedores > 0 || archivoproveedores.length() != 0) {
-=======
-        
-        if (provee.numProveedores > 0||archivoproveedores.length()!=0) {
->>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
 
             try {
 
-<<<<<<< HEAD
                 FileWriter fw = new FileWriter(archivoarticulos, true);
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter pw = new PrintWriter(bw);
                 pw.print(get(1));
+                if (validarCodigoArticulo(codigo)) {
+                    System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
+                    return;
+                }
                 pw.print("," + get(""));
                 pw.print("," + get(1.0));
                 pw.print("," + get(1, ""));
                 pw.print("," + provee.get("", 1) + "\n");
-=======
-            FileWriter fw = new FileWriter("Articulos.txt", false);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            pw.print(get(1));
-            if(validarCodigoArticulo(codigo)){
-                System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
-        return;
-            }
-            pw.print("," + get(""));
-            pw.print("," + get(1.0));
-            pw.print("," + get(1, ""));
-            pw.print("," + provee.get("",1)+ "\n");
->>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
 
                 pw.close();
             } catch (Exception e) {
@@ -240,91 +219,78 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public void modificarArticulos() {
-        int codigoBuscado=0;
-        int codigo =0;
-        
+        int codigoBuscado = 0;
+        int codigo = 0;
+
         try {
-            if(archivoarticulos.exists()&&archivoarticulos.length()!=0){
-            System.out.println("Introduce el código del artículo a modificar:");
-            codigoBuscado = leer.nextInt();
-           
+            if (archivoarticulos.exists() && archivoarticulos.length() != 0) {
+                System.out.println("Introduce el código del artículo a modificar:");
+                codigoBuscado = leer.nextInt();
 
-            List<String> lineas = new ArrayList<>();
+                List<String> lineas = new ArrayList<>();
 
-            BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
-            String linea="";
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                codigo = Integer.parseInt(datos[0]);
+                BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
+                String linea = "";
+                while ((linea = br.readLine()) != null) {
+                    String[] datos = linea.split(",");
+                    codigo = Integer.parseInt(datos[0]);
 
-                if (codigo == codigoBuscado) {
-                    // Modificar el artículo
-                    System.out.println("Introduce el nuevo nombre del artículo:");
-                    String nuevoNombre = leer.nextLine();
-                    System.out.println("Introduce el nuevo precio del artículo:");
-                    double nuevoPrecio = leer.nextDouble();
-                    provee.get("",1);
-                    
-                    linea = codigo + "," + nuevoNombre + "," + nuevoPrecio;
-                    System.out.println("El artículo se ha modificado correctamente.");
-                    lineas.add(linea);
+                    if (codigo == codigoBuscado) {
+                        // Modificar el artículo
+                        System.out.println("Introduce el nuevo nombre del artículo:");
+                        String nuevoNombre = leer.nextLine();
+                        System.out.println("Introduce el nuevo precio del articulo:");
+                        double nuevoPrecio = leer.nextDouble();
+                        provee.get("", 1);
+
+                        linea = codigo + "," + nuevoNombre + "," + nuevoPrecio;
+                        System.out.println("El articulo se ha modificado correctamente.");
+                        lineas.add(linea);
+                    } else {
+                        System.out.println("No se encontró ningún articulo con el codigo especificado.");
+                    }
+
                 }
-                else{
-                    System.out.println("No se encontró ningún articulo con el código especificado.");
-        
-                
-                    
+
+                br.close();
+                FileWriter fw = new FileWriter("Articulos.txt", false);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(bw);
+                for (String line : lineas) {
+                    pw.println(line);
                 }
-                
-                
+
+                pw.close();
+
+            } else {
+                System.out.println("No hay Articulos registrados, por favor registra primero un ");
+
             }
-
-            br.close();
-
-            FileWriter fw = new FileWriter("Articulos.txt", false);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-
-            for (String line : lineas) {
-                pw.println(line);
-            }
-
-            pw.close();
-
-             }else{
-            System.out.println("No hay Articulos registrados, por favor registra primero un ");
-        }
-            
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-       
+
     }
 
     public static void mostrarArticulos() {//No se usa :/
         try {
-            if (!(archivoarticulos.exists())||archivoarticulos.length() == 0) {
+            FileWriter crear = new FileWriter(archivoarticulos, true);
+            if (!(archivoarticulos.exists()) || archivoarticulos.length() == 0) {
                 System.out.println("No has agregado proveedores aun");
+            } else {
+                BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
+                PrintWriter escribir = new PrintWriter(crear);
+                String st;
+                Vector<String> v = new Vector(40);
+                for (int i = 0; (st = brCablon.readLine()) != null; i++) {
+                    v.addElement(st);
+                }
+                String[] Arreglo = v.toArray(new String[v.size()]);
+                System.out.println(Arreglo[(Arreglo.length - 1)] + "\n");
             }
-            else{
-                FileWriter crear = new FileWriter(archivoarticulos, true);
-            BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
-            PrintWriter escribir = new PrintWriter(crear);
-            String st;
-            Vector<String> v = new Vector(40);
-            for (int i = 0; (st = brCablon.readLine()) != null; i++) {
-                v.addElement(st);
-
-            }
-            String[] Arreglo = v.toArray(new String[v.size()]);
-            System.out.println(Arreglo[(Arreglo.length - 1)] + "\n");
-            }
-            
 
         } catch (IOException e) {
         }
-
     }
 
     public static void consultarArticulos() {
@@ -355,65 +321,45 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public static void eliminarArticulos() {
-<<<<<<< HEAD
         try {
-            BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
-            ArrayList<String> lineas = new ArrayList<>();
-=======
-         try {
-             if(archivoarticulos.exists()&&archivoarticulos.length()!=0){
-        BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
-        ArrayList<String> lineas = new ArrayList<>();
->>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
+            if (archivoarticulos.exists() && archivoarticulos.length() != 0) {
+                BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
+                ArrayList<String> lineas = new ArrayList<>();
 
-            String linea;
-            int codigoEliminar;
-
-            System.out.println("Introduce el código del artículo a eliminar:            " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
-            codigoEliminar = leer.nextInt();
-
-            boolean encontrado = false;
-
-            while ((linea = br.readLine()) != null) {
-                String[] partes = linea.split(",");
-                int codigo = Integer.parseInt(partes[0]);
-
-                if (codigo == codigoEliminar) {
-                    encontrado = true;
-                    System.out.println("El siguiente artículo ha sido eliminado:");
-                    System.out.println(linea);
+                String linea;
+                int codigoEliminar;
+                System.out.println("Introduce el código del artículo a eliminar:            " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+                codigoEliminar = leer.nextInt();
+                boolean encontrado = false;
+                while ((linea = br.readLine()) != null) {
+                    String[] partes = linea.split(",");
+                    int codigo = Integer.parseInt(partes[0]);
+                    if (codigo == codigoEliminar) {
+                        encontrado = true;
+                        System.out.println("El siguiente artículo ha sido eliminado:");
+                        System.out.println(linea);
+                    } else {
+                        lineas.add(linea);
+                    }
+                }
+                br.close();
+                if (!encontrado) {
+                    System.out.println("No se encontró ningún artículo con el código especificado.");
                 } else {
-                    lineas.add(linea);
+                    PrintWriter pw = new PrintWriter(new FileWriter("Articulos.txt"));
+                    for (String articulo : lineas) {
+                        pw.println(articulo);
+                    }
+
+                    pw.close();
                 }
-            }
-
-            br.close();
-
-            if (!encontrado) {
-                System.out.println("No se encontró ningún artículo con el código especificado.");
             } else {
-                PrintWriter pw = new PrintWriter(new FileWriter("Articulos.txt"));
-
-                for (String articulo : lineas) {
-                    pw.println(articulo);
-                }
-
-                pw.close();
+                System.out.println("No hay articulos registrados, por favor registra primero un ");
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-<<<<<<< HEAD
-=======
-         }else{
-            System.out.println("No hay articulos registrados, por favor registra primero un ");
-        }
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
->>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
     }
 
     public void menuArticulosDueno() throws IOException {
@@ -450,7 +396,8 @@ public class Articulo extends TiendaDeAbarrotes {
         } while (respuestaduenoArticulos != 5);
 
     }
-    public boolean validarCodigoArticulo(int codigo) {
+    
+     public boolean validarCodigoArticulo(int codigo) {
         int codigoArticulo=0;
     try {
         BufferedReader br = new BufferedReader(new FileReader(archivoarticulos));
@@ -475,5 +422,6 @@ public class Articulo extends TiendaDeAbarrotes {
 
     return false; // El código no existe
 }
+
 
 }
