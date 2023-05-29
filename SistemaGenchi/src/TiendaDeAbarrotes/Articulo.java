@@ -32,6 +32,7 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     public static File archivocarrito = new File("Carrito.txt");
     public static File archivoarticulos = new File("Articulos.txt");
     public static File archivoproveedores = new File("Proveedores.txt");
+    Proveedor provee = new Proveedor(1, "", "");
     double precio;//Variable de tipo Dobule Publica llamada "precio"
     int stock;
 
@@ -198,15 +199,19 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     }
 
     public void anadirArticulo() {
-        Proveedor provee = new Proveedor(1, "", "");
+        
         if (provee.numProveedores > 0||archivoproveedores.length()!=0) {
 
         try {
 
-            FileWriter fw = new FileWriter("Articulos.txt", true);
+            FileWriter fw = new FileWriter("Articulos.txt", false);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
             pw.print(get(1));
+            if(validarCodigoArticulo(codigo)){
+                System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
+        return;
+            }
             pw.print("," + get(""));
             pw.print("," + get(1.0));
             pw.print("," + get(1, ""));
@@ -223,19 +228,23 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
         }
     }
 
-    public static void modificarArticulos() {
+    public void modificarArticulos() {
+        int codigoBuscado=0;
+        int codigo =0;
+        
         try {
+            if(archivoarticulos.exists()&&archivoarticulos.length()!=0){
             System.out.println("Introduce el código del artículo a modificar:");
-            int codigoBuscado = leer.nextInt();
-            leer.nextLine(); // Limpiar el buffer
+            codigoBuscado = leer.nextInt();
+           
 
             List<String> lineas = new ArrayList<>();
 
             BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
-            String linea;
+            String linea="";
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
-                int codigo = Integer.parseInt(datos[0]);
+                codigo = Integer.parseInt(datos[0]);
 
                 if (codigo == codigoBuscado) {
                     // Modificar el artículo
@@ -243,9 +252,20 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
                     String nuevoNombre = leer.nextLine();
                     System.out.println("Introduce el nuevo precio del artículo:");
                     double nuevoPrecio = leer.nextDouble();
+                    provee.get("",1);
+                    
                     linea = codigo + "," + nuevoNombre + "," + nuevoPrecio;
+                    System.out.println("El artículo se ha modificado correctamente.");
+                    lineas.add(linea);
                 }
-                lineas.add(linea);
+                else{
+                    System.out.println("No se encontró ningún articulo con el código especificado.");
+        
+                
+                    
+                }
+                
+                
             }
 
             br.close();
@@ -260,16 +280,24 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
             pw.close();
 
-            System.out.println("El artículo se ha modificado correctamente.");
+             }else{
+            System.out.println("No hay Articulos registrados, por favor registra primero un ");
+        }
+            
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+       
     }
 
-    public static void mostrarArticulos() {
+    public static void mostrarArticulos() {//No se usa :/
         try {
-            FileWriter crear = new FileWriter(archivoarticulos, true);
+            if (!(archivoarticulos.exists())||archivoarticulos.length() == 0) {
+                System.out.println("No has agregado proveedores aun");
+            }
+            else{
+                FileWriter crear = new FileWriter(archivoarticulos, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
             PrintWriter escribir = new PrintWriter(crear);
             String st;
@@ -280,6 +308,8 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
             System.out.println(Arreglo[(Arreglo.length - 1)] + "\n");
+            }
+            
 
         } catch (IOException e) {
         }
@@ -316,6 +346,7 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
     public static void eliminarArticulos() {
          try {
+             if(archivoarticulos.exists()&&archivoarticulos.length()!=0){
         BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
         ArrayList<String> lineas = new ArrayList<>();
 
@@ -352,6 +383,9 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
             }
 
             pw.close();
+        }
+         }else{
+            System.out.println("No hay articulos registrados, por favor registra primero un ");
         }
 
     } catch (IOException e) {
@@ -393,5 +427,30 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
         } while (respuestaduenoArticulos != 5);
 
     }
+    public boolean validarCodigoArticulo(int codigo) {
+        int codigoArticulo=0;
+    try {
+        BufferedReader br = new BufferedReader(new FileReader(archivoarticulos));
+
+        String linea;
+
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(",");
+            codigoArticulo = Integer.parseInt(partes[0]);
+
+            if (codigoArticulo == codigo) {
+                br.close();
+                return true; // El código ya existe
+            }
+        }
+
+        br.close();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return false; // El código no existe
+}
 
 }
