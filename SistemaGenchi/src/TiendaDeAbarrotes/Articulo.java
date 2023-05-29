@@ -5,33 +5,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
 public class Articulo extends TiendaDeAbarrotes {
-public static final String ANSI_BLACK = "\u001B[30m";
-public static final String ANSI_RED = "\u001B[31m";
-public static final String ANSI_GREEN = "\u001B[32m";
-public static final String ANSI_YELLOW = "\u001B[33m";
-public static final String ANSI_BLUE = "\u001B[34m";
-public static final String ANSI_PURPLE = "\u001B[35m";
-public static final String ANSI_CYAN = "\u001B[36m";
-public static final String ANSI_WHITE = "\u001B[37m";
-public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
-public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-public static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";
-public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
-public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-
-    public static File archivoticket= new File ("Ticket.txt");
+    public static File archivoticket = new File("Ticket.txt");
     public static File archivocarrito = new File("Carrito.txt");
     public static File archivoarticulos = new File("Articulos.txt");
     public static File archivoproveedores = new File("Proveedores.txt");
+    public static File archivoventafinal = new File("VentaFinal.txt");
     double precio;//Variable de tipo Dobule Publica llamada "precio"
     int stock;
 
@@ -41,38 +24,44 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
     public int get(int Codigo) {
         leer.nextLine();
-        System.out.println("Introduce el codigo del nuevo producto:         "+ANSI_GREEN+"#Dueno#"+ANSI_GREEN);
+        System.out.println("Introduce el codigo del nuevo producto:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         codigo = leer.nextInt();
         return codigo;
     }
 
     public String get(String Nombre) {
         leer.nextLine();//limpieza del scanner
-        System.out.println("Introduce el nombre del nuevo producto:         "+ANSI_GREEN+"#Dueno#"+ANSI_GREEN);
+        System.out.println("Introduce el nombre del nuevo producto:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         nombre = leer.next();
         return nombre;
     }
 
     public double get(double Precio) {
         leer.nextLine();//limpieza del scanner
-        System.out.println("Introduce el precio del nuevo producto:         "+ANSI_GREEN+"#Dueno#"+ANSI_GREEN);
+        System.out.println("Introduce el precio del nuevo producto:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         precio = leer.nextDouble();
         return precio;
     }
 
     public int get(int Cantidad, String Ola) {
         leer.nextLine();//limpieza del scanner
-        System.out.println("Introduce la cantidad de nuevo producto:        "+ANSI_GREEN+"#Dueno#"+ANSI_GREEN);
+        System.out.println("Introduce la cantidad de nuevo producto:        " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         stock = leer.nextInt();
         return stock;
     }
-    
+
+    public static void cerrarVenta() throws IOException {
+        FileWriter creararchivoventafinal = new FileWriter(archivoventafinal, true);
+        BufferedReader lectura = new BufferedReader(new FileReader(archivoventafinal));
+
+    }
+
     static void adquirirArticulos() throws IOException {
-        String productoelegido = "",copiarenglon="";
-        int cantidadproductoelegido = 0, stockdisponiblearticuloelegido = 0,respuesta = 0;
+        String productoelegido = "", copiarenglon = "";
+        int cantidadproductoelegido = 0, stockdisponiblearticuloelegido = 0, respuesta = 0;
         try {
             FileWriter creararchivoarticulos = new FileWriter(archivoarticulos, true);
-            FileWriter creaarchivocarrito = new FileWriter(archivocarrito, false);//Para eliminar el archivo y crearlo en blanco, dejar en false
+            FileWriter creaarchivocarrito = new FileWriter(archivocarrito, true);//Para eliminar el archivo y crearlo en blanco, dejar en false
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
             PrintWriter escrituraarchivocarrito = new PrintWriter(creaarchivocarrito);
             PrintWriter escrituraarchivoarticulos = new PrintWriter(creararchivoarticulos);
@@ -83,39 +72,36 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
             System.out.println("Articulos en venta:" + "\n");
-            for (int x = 0; Arreglo.length > x; x++) {
-                String[] partesparamostrar = Arreglo[x].split(",");
-                System.out.println("Codigo: " + partesparamostrar[0] + "      Producto: " + partesparamostrar[1] + "        Precio: " + partesparamostrar[2] + "$         Stock: " + partesparamostrar[3] + "\n");
-            }
+
             leer.nextLine();//limpieza del scanner
             do {
+                for (int x = 0; Arreglo.length > x; x++) {
+                    String[] partesparamostrar = Arreglo[x].split(",");
+                    System.out.println("Codigo: " + partesparamostrar[0] + "      Producto: " + partesparamostrar[1] + "        Precio: " + partesparamostrar[2] + "$         Stock: " + partesparamostrar[3] + "\n");
+                }
                 System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):" + "\n");
-                productoelegido = leer.nextLine();
+                productoelegido = leerProducto.nextLine();
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
-                    copiarenglon=Arreglo[renglon];
+                    copiarenglon = Arreglo[renglon];
                     String[] partesparaescritura = Arreglo[renglon].split(",");
                     if (partesparaescritura[1].equalsIgnoreCase(productoelegido)) {
-                        stockdisponiblearticuloelegido=Integer.parseInt(partesparaescritura[3]);
+                        stockdisponiblearticuloelegido = Integer.parseInt(partesparaescritura[3]);
                         System.out.println("Cuanto(s) " + productoelegido + "(s)" + " desea comprar?");
                         cantidadproductoelegido = leer.nextInt();
                         if (cantidadproductoelegido < stockdisponiblearticuloelegido) {
-                            System.out.println("Esta seguro de adquirir "+cantidadproductoelegido+" "+productoelegido+"(s)?:");
+                            System.out.println("Esta seguro de adquirir " + cantidadproductoelegido + " " + productoelegido + "(s)?:");
                             System.out.println("1.- Si      2.-No");
-                            respuesta=leer.nextInt();
-                            switch(respuesta){
+                            respuesta = leer.nextInt();
+                            switch (respuesta) {
                                 case 1:
-                                    FileWriter flasheararchivoarticulos = new FileWriter(archivoarticulos,false);
+                                    FileWriter flasheararchivoarticulos = new FileWriter(archivoarticulos, false);
                                     escrituraarchivocarrito.print(partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + cantidadproductoelegido + "\n");
-                                    if(copiarenglon.equals(Arreglo[renglon])){
-                                        Arreglo[renglon]=(partesparaescritura[0]+","+partesparaescritura[1]+","+partesparaescritura[2]+","+(Integer.parseInt(partesparaescritura[3])-cantidadproductoelegido)+","+partesparaescritura[4]);
-                                        for(int r=0;Arreglo.length>r;r++){
-                                            escrituraarchivoarticulos.print(Arreglo[renglon]);
-                                        }
-                                        escrituraarchivoarticulos.println();
-                                        escrituraarchivoarticulos.close();
+                                    if (copiarenglon.equals(Arreglo[renglon])) {
+                                        Arreglo[renglon] = (partesparaescritura[0] + "," + partesparaescritura[1] + "," + partesparaescritura[2] + "," + (Integer.parseInt(partesparaescritura[3]) - cantidadproductoelegido) + "," + partesparaescritura[4]);
+                                        
+                                        
                                     }
-                            System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
-                            renglon = Arreglo.length + 1;
+                                    System.out.println(cantidadproductoelegido + " " + partesparaescritura[1] + "(s)" + " agregado(s) al carrito" + "\n");
                                     break;
                                 case 2:
                                     adquirirArticulos();
@@ -126,7 +112,11 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
                 }
             } while (!(productoelegido.equalsIgnoreCase("x")));
             System.out.println("Has dejado de comprar");
+            for (int r = 0; Arreglo.length > r; r++) {
+                                            escrituraarchivoarticulos.println(Arreglo[r]);
+                                        }
             escrituraarchivocarrito.close();
+            escrituraarchivoarticulos.close();
             creaarchivocarrito.close();
             creararchivoarticulos.close();
             menuCliente();
@@ -150,11 +140,10 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
             if (archivocarrito.length() != 0) {
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
                     String[] partes = Arreglo[renglon].split(",");
-                    System.out.println("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + " Cantidad: "+partes[3]+"\n");
+                    System.out.println("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + " Cantidad: " + partes[3] + "\n");
                 }
             } else {
-                System.out.println("No has comprado aun" + "\n");
-                
+                System.out.println(ANSI_RED + "NO has comprado aun" + ANSI_RESET);
             }
         } catch (IOException ex) {
 
@@ -162,64 +151,67 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     }
 
     public static void pagarCarrito() {
-        Date fecha=new Date();
-        SimpleDateFormat formatoFecha=new SimpleDateFormat("dd-MMMM-yyyy hh:mm:ss");
+        Date fecha = new Date();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMMM-yyyy hh:mm:ss");
         String fechaimprimir = formatoFecha.format(new Date());
-        double totalapagar=0;
-        if((archivocarrito.exists())||archivocarrito.length()!=0){
-        try {
-            FileWriter creararchivoticket = new FileWriter(archivoticket, true);
-            BufferedReader brCablon = new BufferedReader(new FileReader(archivocarrito));
-            PrintWriter escribirarchivoticket = new PrintWriter(creararchivoticket);
-            String st;
-            Vector<String> v = new Vector(40);
-            for (int i = 0; (st = brCablon.readLine()) != null; i++) {
-                v.addElement(st);
-            }
-            String[] Arreglo = v.toArray(new String[v.size()]);
-            System.out.println("Productos en carrito a pagar: ");
-            for (int renglon = 0; Arreglo.length > renglon; renglon++) {
-                    String[] partes = Arreglo[renglon].split(",");
-                    escribirarchivoticket.print("\n"+"ABARROTES DON CRETACIO"+"\n");
-                    escribirarchivoticket.println(fechaimprimir+"\n");
-                    System.out.println("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + "$ Cantidad: "+partes[3]+"\n");
-                    escribirarchivoticket.print("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + "$ Cantidad: "+partes[3]+"\n");
-                    totalapagar+=(Double.parseDouble(partes[2])*Double.parseDouble(partes[3]));
-                    System.out.println("Total a pagar: "+totalapagar+"$");
+        double totalapagar = 0;
+        if (!(archivocarrito.exists()) || archivocarrito.length() != 0) {
+            try {
+                FileWriter creararchivoticket = new FileWriter(archivoticket, true);
+                BufferedReader brCablon = new BufferedReader(new FileReader(archivocarrito));
+                PrintWriter escribirarchivoticket = new PrintWriter(creararchivoticket);
+                String st;
+                Vector<String> v = new Vector(40);
+                for (int i = 0; (st = brCablon.readLine()) != null; i++) {
+                    v.addElement(st);
                 }
-            escribirarchivoticket.print("Total a pagar: "+totalapagar+"$\n");
-            escribirarchivoticket.close();
-            creararchivoticket.close();
-            FileWriter borrararchivocarrito = new FileWriter(archivocarrito,false);
-        } catch (IOException ex) {
+                String[] Arreglo = v.toArray(new String[v.size()]);
+                System.out.println("Productos en carrito a pagar: ");
+                escribirarchivoticket.print("ABARROTES DON CRETACIO" + "\n");
+                escribirarchivoticket.println(fechaimprimir + "\n");
+                for (int renglon = 0; Arreglo.length > renglon; renglon++) {
+                    String[] partes = Arreglo[renglon].split(",");
+                    System.out.println("Codigo: " + partes[0] + "   Producto: " + partes[1] + " Precio: " + partes[2] + "$  Cantidad: " + partes[3] + "\n");
+                    escribirarchivoticket.print("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + "$ Cantidad: " + partes[3] + "\n");
+                    totalapagar += (Double.parseDouble(partes[2]) * Double.parseDouble(partes[3]));
+                }
+                escribirarchivoticket.print("\n" + "Total a pagar: " + totalapagar + "$\n" + "\n");
+                System.out.println("Total a pagar: " + totalapagar + "$");
+                escribirarchivoticket.close();
+                creararchivoticket.close();
+                FileWriter borrararchivocarrito = new FileWriter(archivocarrito, false);
+            } catch (IOException ex) {
 
+            }
+        } else {
+            System.out.println(ANSI_RED + "NO has comprado aun" + ANSI_RESET);
         }
-        }
+
     }
 
     public void anadirArticulo() {
         Proveedor provee = new Proveedor(1, "", "");
-        if (provee.numProveedores > 0||archivoproveedores.length()!=0) {
+        if (provee.numProveedores > 0 || archivoproveedores.length() != 0) {
 
-        try {
+            try {
 
-            FileWriter fw = new FileWriter("Articulos.txt", true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            pw.print(get(1));
-            pw.print("," + get(""));
-            pw.print("," + get(1.0));
-            pw.print("," + get(1, ""));
-            pw.print("," + provee.get("",1)+ "\n");
+                FileWriter fw = new FileWriter(archivoarticulos, true);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter pw = new PrintWriter(bw);
+                pw.print(get(1));
+                pw.print("," + get(""));
+                pw.print("," + get(1.0));
+                pw.print("," + get(1, ""));
+                pw.print("," + provee.get("", 1) + "\n");
 
-            pw.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
-        System.out.println("Se ha anadido el siguiente articulo al inventario:");
-        mostrarArticulos();
-    }else{
-            System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
+                pw.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+            System.out.println("Se ha anadido el siguiente articulo al inventario:");
+            mostrarArticulos();
+        } else {
+            System.out.println(ANSI_RED + "No hay proveedores registrados, por favor registra primero un proveedor" + ANSI_GREEN);
         }
     }
 
@@ -298,15 +290,14 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
-            if(archivoarticulos.exists()&&archivoarticulos.length()!=0){
-            System.out.println("_-_-_-_-PRODUCTOS EN INVENTARIO:_-_-_-_-"+"         #Dueno#"+ANSI_GREEN+"\n");
-            for (int x = 0; Arreglo.length > x; x++) {
-                String[] partesparamostrar = Arreglo[x].split(",");
-                System.out.println("Codigo: " + partesparamostrar[0] + "      Producto: " + partesparamostrar[1] + "        Precio: " + partesparamostrar[2] + "$         Stock: " + partesparamostrar[3] +"    Empresa del proveedor: "+partesparamostrar[4]+"\n");
-            }
-            }
-            else{
-                System.out.println("\n"+ANSI_RED + "No hay productos en inventario, agrega algo"+ANSI_GREEN+"\n");
+            if (archivoarticulos.exists() && archivoarticulos.length() != 0) {
+                System.out.println("_-_-_-_-PRODUCTOS EN INVENTARIO:_-_-_-_-" + "         #Dueno#" + ANSI_GREEN + "\n");
+                for (int x = 0; Arreglo.length > x; x++) {
+                    String[] partesparamostrar = Arreglo[x].split(",");
+                    System.out.println("Codigo: " + partesparamostrar[0] + "      Producto: " + partesparamostrar[1] + "        Precio: " + partesparamostrar[2] + "$         Stock: " + partesparamostrar[3] + "    Empresa del proveedor: " + partesparamostrar[4] + "\n");
+                }
+            } else {
+                System.out.println("\n" + ANSI_RED + "No hay productos en inventario, agrega algo" + ANSI_GREEN + "\n");
             }
 
         } catch (IOException e) {
@@ -315,55 +306,55 @@ public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     }
 
     public static void eliminarArticulos() {
-         try {
-        BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
-        ArrayList<String> lineas = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
+            ArrayList<String> lineas = new ArrayList<>();
 
-        String linea;
-        int codigoEliminar;
+            String linea;
+            int codigoEliminar;
 
-        System.out.println("Introduce el código del artículo a eliminar:            "+ANSI_GREEN+"#Dueno#"+ANSI_GREEN);
-        codigoEliminar = leer.nextInt();
+            System.out.println("Introduce el código del artículo a eliminar:            " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+            codigoEliminar = leer.nextInt();
 
-        boolean encontrado = false;
+            boolean encontrado = false;
 
-        while ((linea = br.readLine()) != null) {
-            String[] partes = linea.split(",");
-            int codigo = Integer.parseInt(partes[0]);
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(",");
+                int codigo = Integer.parseInt(partes[0]);
 
-            if (codigo == codigoEliminar) {
-                encontrado = true;
-                System.out.println("El siguiente artículo ha sido eliminado:");
-                System.out.println(linea);
+                if (codigo == codigoEliminar) {
+                    encontrado = true;
+                    System.out.println("El siguiente artículo ha sido eliminado:");
+                    System.out.println(linea);
+                } else {
+                    lineas.add(linea);
+                }
+            }
+
+            br.close();
+
+            if (!encontrado) {
+                System.out.println("No se encontró ningún artículo con el código especificado.");
             } else {
-                lineas.add(linea);
-            }
-        }
+                PrintWriter pw = new PrintWriter(new FileWriter("Articulos.txt"));
 
-        br.close();
+                for (String articulo : lineas) {
+                    pw.println(articulo);
+                }
 
-        if (!encontrado) {
-            System.out.println("No se encontró ningún artículo con el código especificado.");
-        } else {
-            PrintWriter pw = new PrintWriter(new FileWriter("Articulos.txt"));
-
-            for (String articulo : lineas) {
-                pw.println(articulo);
+                pw.close();
             }
 
-            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
     }
 
     public void menuArticulosDueno() throws IOException {
         int respuestaduenoArticulos = 0;
         do {
             leer.nextLine();
-            System.out.println("Que desea hacer con Articulos?:             "+"#Dueno#"+ANSI_GREEN);
+            System.out.println("Que desea hacer con Articulos?:             " + "#Dueno#" + ANSI_GREEN);
             System.out.println("1. Anadir articulos");
             System.out.println("2. Eliminar articulos");
             System.out.println("3. Modificar articulos");

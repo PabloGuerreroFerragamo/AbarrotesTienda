@@ -31,6 +31,7 @@ public class TiendaDeAbarrotes {//Daddy
 
     public static Articulo llamador = new Articulo(1, "");
     public static Scanner leer = new Scanner(System.in);
+    public static Scanner leerProducto = new Scanner(System.in);
     int codigo; //Variable de tipo entera Publica llamada "codigo"
     String nombre;//Variable de tipo String Publica llamada "nombre"
 
@@ -42,7 +43,7 @@ public class TiendaDeAbarrotes {//Daddy
     static void menuRoles() throws IOException {
         int respuestaUser = 0;
         do {
-            System.out.println(ANSI_RESET + "Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-");
+            System.out.println(ANSI_YELLOW + "Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-        " + "#Menu Principal#" + ANSI_RESET);
             System.out.println("1.- Soy un cliente    2.-Soy el dueno   3.-Salir del sistema");
             respuestaUser = leer.nextInt();
             switch (respuestaUser) {
@@ -57,7 +58,7 @@ public class TiendaDeAbarrotes {//Daddy
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Opcion Invalida, Ingresa de nuevo");
+                    System.out.println(ANSI_RED + "Opcion Invalida, Ingresa de nuevo" + ANSI_RESET);
             }
         } while (respuestaUser != 3);
     }
@@ -87,11 +88,13 @@ public class TiendaDeAbarrotes {//Daddy
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Opcion invalida, Intentalo de nuevo");
+                    System.out.println(ANSI_RED + "Opcion invalida, Intentalo de nuevo" + ANSI_RESET);
             }
         } while (respuestaCliente != 5);
     }
 
+    
+    
     public static void menuDueno() throws IOException {
         Articulo llamandoArticulos = new Articulo(1, "");
         Proveedor llamandoProveedor = new Proveedor(1, "", "");
@@ -101,7 +104,8 @@ public class TiendaDeAbarrotes {//Daddy
             System.out.println(ANSI_GREEN + "Con que quieres trabajar?_-_-_-_-_-_-_-_-_-_-_-_-_-_-       " + "#Dueno#" + ANSI_GREEN);
             System.out.println("1. Articulos");
             System.out.println("2. Proveedor");
-            System.out.println("3.-Regresar al menu Anterior");
+            System.out.println("3.-Cerrar venta diaria");
+            System.out.println("4.-Regresar al menu Anterior");
             respuestaDueno = leer.nextInt();
             switch (respuestaDueno) {
                 case 1:
@@ -111,14 +115,16 @@ public class TiendaDeAbarrotes {//Daddy
                     llamandoProveedor.menuProveedoresDueno();
                     break;
                 case 3:
+                    
+                    break;
+                case 4:
                     menuRoles();
                     break;
                 default:
-                    System.out.println("Opcion Invalida, ingresa una opcion valida");
+                    System.out.println(ANSI_RED + "Opcion Invalida, ingresa una opcion valida" + ANSI_RESET);
             }
         } while (respuestaDueno != 3);
     }
-
 
     public static void main(String[] args) throws IOException {
         menuRoles();

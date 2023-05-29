@@ -42,24 +42,20 @@ public class Proveedor extends TiendaDeAbarrotes {
         empresaProveedor = leer.nextLine();
         return empresaProveedor;
     }
-<<<<<<< HEAD
-    
-    String getCorreoE(){
-        System.out.print("Ingrese el correo electronico del proveedor: ");
-            correoElectronico = leer.nextLine();
-            return correoElectronico;
-    }
-    
-    String getUbicacion(){
-        System.out.print("Ingrese la ubicacion del proveedor: ");
-            ubicacionProveedor = leer.nextLine();
-            return ubicacionProveedor;
-    }
-    
-=======
 
->>>>>>> 26ac9c05f97f1c4346f363e3d8cc449b696517fd
-    void agregarProveedores() {
+    String getCorreoE() {
+        System.out.print("Ingrese el correo electronico del proveedor: ");
+        correoElectronico = leer.nextLine();
+        return correoElectronico;
+    }
+
+    String getUbicacion() {
+        System.out.print("Ingrese la ubicacion del proveedor: ");
+        ubicacionProveedor = leer.nextLine();
+        return ubicacionProveedor;
+    }
+
+    void agregarProveedores() throws IOException {
         try {
 
             FileWriter fw = new FileWriter("Proveedores.txt", true);
@@ -76,30 +72,39 @@ public class Proveedor extends TiendaDeAbarrotes {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
-        System.out.println("Proveedor agregado con éxito");
+        System.out.println("Proveedor agregado con exito:\n");
+        FileWriter crear = new FileWriter(archivoProveedores, true);
+        BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));
+        String st;
+        Vector<String> v = new Vector(40);
+        for (int i = 0; (st = brCablon.readLine()) != null; i++) {
+            v.addElement(st);
+        }
+        String[] Arreglo = v.toArray(new String[v.size()]);
+        String[] partesparamostrar = Arreglo[Arreglo.length - 1].split(",");
+        System.out.println("ID del Proveedor: " + partesparamostrar[0] + "    Nombre del proveedor: " + partesparamostrar[1] + "    Empresa del proveedor: " + partesparamostrar[2] + "    Correo E.:  " + partesparamostrar[3] + "    Ubicacion:  " + partesparamostrar[4] + "\n");
+
     }
 
     void mostrarProveedores() {
-        System.out.println(ANSI_GREEN+"_-_-_-_-_-_-_-_-_Proveedores Existentes_-_-_-_-_-_-_-_-_");
+        System.out.println(ANSI_GREEN + "_-_-_-_-_-_-_-_-_Proveedores Existentes_-_-_-_-_-_-_-_-_");
         try {
             FileWriter crear = new FileWriter(archivoProveedores, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));
-            PrintWriter escribir = new PrintWriter(crear);
             String st;
             Vector<String> v = new Vector(40);
             for (int i = 0; (st = brCablon.readLine()) != null; i++) {
                 v.addElement(st);
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
-            if (!(archivoProveedores.exists())||archivoProveedores.length() == 0) {
-                System.out.println("No has agregado proveedores aun");
+            if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {
+                System.out.println(ANSI_RED + "No has agregado proveedores aun" + ANSI_RESET);
             } else {
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {
                     String[] partesparamostrar = Arreglo[renglon].split(",");
-                    System.out.println("\nID del Proveedor: " + partesparamostrar[0] + "    Nombre del proveedor: " + partesparamostrar[1] + "    Empresa del proveedor: " + partesparamostrar[2]);
+                    System.out.println("\nID del Proveedor: " + partesparamostrar[0] + "    Nombre del proveedor: " + partesparamostrar[1] + "    Empresa del proveedor: " + partesparamostrar[2] + "    Correo E.:  " + partesparamostrar[3] + "    Ubicacion:  " + partesparamostrar[4] + "\n");
                 }
             }
-            System.out.println();
 
         } catch (IOException e) {
         }
@@ -111,15 +116,10 @@ public class Proveedor extends TiendaDeAbarrotes {
             BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));
             ArrayList<String> lineas = new ArrayList<>();
 
-<<<<<<< HEAD
-        String linea;
-        int codigoEliminar;
-        
-        mostrarProveedores();
-=======
             String linea;
             int codigoEliminar;
->>>>>>> 26ac9c05f97f1c4346f363e3d8cc449b696517fd
+
+            mostrarProveedores();
 
             System.out.println("Introduce el código del proveedor a eliminar:");
             codigoEliminar = leer.nextInt();
@@ -151,17 +151,15 @@ public class Proveedor extends TiendaDeAbarrotes {
                     pw.println(articulo);
                 }
 
-<<<<<<< HEAD
-        if (!encontrado) {
-            System.out.println("No se encontró ningún proveedor con el código especificado");
-        } else {
-            PrintWriter pw = new PrintWriter(new FileWriter(archivoProveedores));
+                if (!encontrado) {
+                    System.out.println("No se encontró ningún proveedor con el código especificado");
+                } else {
 
-            for (String articulo : lineas) {
-                pw.println(articulo);
-=======
-                pw.close();
->>>>>>> 26ac9c05f97f1c4346f363e3d8cc449b696517fd
+                    for (String articulo : lineas) {
+                        pw.println(articulo);
+                        pw.close();
+                    }
+                }
             }
 
         } catch (IOException e) {
@@ -169,24 +167,14 @@ public class Proveedor extends TiendaDeAbarrotes {
         }
     }
 
-<<<<<<< HEAD
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
-    }
-    
-    void modificarProveedor(){
+    void modificarProveedor() {
         String nuevoNombre;
         String nuevoNombreEmpresa;
         String nuevaUbi;
         String nuevoCorreo;
-        int elSwichNoSirve=0;
-        
+        int elSwichNoSirve = 0;
+
         mostrarProveedores();
-        
-=======
-    void modificarProveedor() {
->>>>>>> 26ac9c05f97f1c4346f363e3d8cc449b696517fd
         try {
             System.out.println("Introduce el código del proveedor a modificar:");
             int codigoBuscado = leer.nextInt();
@@ -211,8 +199,7 @@ public class Proveedor extends TiendaDeAbarrotes {
                     System.out.println("Ingrese el correo electronico del proveedor: ");
                     nuevoCorreo = leer.nextLine();
                     linea = codigo + "," + nuevoNombre + "," + nuevoNombreEmpresa + "," + nuevaUbi + "," + nuevoCorreo;
-                }
-                else{
+                } else {
                     System.out.println("No se encontró ningún proveedor con el código especificado");
                     elSwichNoSirve++;
                 }
@@ -230,26 +217,22 @@ public class Proveedor extends TiendaDeAbarrotes {
             }
 
             pw.close();
-            
-            if(elSwichNoSirve!=1){
+
+            if (elSwichNoSirve != 1) {
                 System.out.println("El proveedor se ha modificado correctamente.");
             }
-            
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-<<<<<<< HEAD
-        elSwichNoSirve=0;
-=======
-
->>>>>>> 26ac9c05f97f1c4346f363e3d8cc449b696517fd
+        elSwichNoSirve = 0;
     }
 
-    String get(String lisboa, int popola) {
+    String get(String lisboa, int popola
+    ) {
         String selccionProveedor = "";
 
-        if (!(archivoProveedores.exists())||archivoProveedores.length()==0) {
+        if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {
             System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
         } else {
             mostrarProveedores();
@@ -334,7 +317,7 @@ public class Proveedor extends TiendaDeAbarrotes {
     public void menuProveedoresDueno() throws IOException {
         int respuestaduenoProveedores = 0;
         do {
-            System.out.println(ANSI_GREEN+"Que desea hacer con Proveedores?_-_-_-_-_-_-_-_-_-_-_-_-_-_-         "+"#Dueno#" + ANSI_GREEN);
+            System.out.println(ANSI_GREEN + "Que desea hacer con Proveedores?_-_-_-_-_-_-_-_-_-_-_-_-_-_-         " + "#Dueno#" + ANSI_GREEN);
             System.out.println("1. Anadir proveedores");
             System.out.println("2. Eliminar proveedores");
             System.out.println("3. Modificar proveedores");
