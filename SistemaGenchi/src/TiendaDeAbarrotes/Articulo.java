@@ -14,7 +14,11 @@ public class Articulo extends TiendaDeAbarrotes {
     public static File archivocarrito = new File("Carrito.txt");
     public static File archivoarticulos = new File("Articulos.txt");
     public static File archivoproveedores = new File("Proveedores.txt");
+<<<<<<< HEAD
     public static File archivoventafinal = new File("VentaFinal.txt");
+=======
+    Proveedor provee = new Proveedor(1, "", "");
+>>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
     double precio;//Variable de tipo Dobule Publica llamada "precio"
     int stock;
 
@@ -190,11 +194,17 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public void anadirArticulo() {
+<<<<<<< HEAD
         Proveedor provee = new Proveedor(1, "", "");
         if (provee.numProveedores > 0 || archivoproveedores.length() != 0) {
+=======
+        
+        if (provee.numProveedores > 0||archivoproveedores.length()!=0) {
+>>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
 
             try {
 
+<<<<<<< HEAD
                 FileWriter fw = new FileWriter(archivoarticulos, true);
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter pw = new PrintWriter(bw);
@@ -203,6 +213,20 @@ public class Articulo extends TiendaDeAbarrotes {
                 pw.print("," + get(1.0));
                 pw.print("," + get(1, ""));
                 pw.print("," + provee.get("", 1) + "\n");
+=======
+            FileWriter fw = new FileWriter("Articulos.txt", false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.print(get(1));
+            if(validarCodigoArticulo(codigo)){
+                System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
+        return;
+            }
+            pw.print("," + get(""));
+            pw.print("," + get(1.0));
+            pw.print("," + get(1, ""));
+            pw.print("," + provee.get("",1)+ "\n");
+>>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
 
                 pw.close();
             } catch (Exception e) {
@@ -215,19 +239,23 @@ public class Articulo extends TiendaDeAbarrotes {
         }
     }
 
-    public static void modificarArticulos() {
+    public void modificarArticulos() {
+        int codigoBuscado=0;
+        int codigo =0;
+        
         try {
+            if(archivoarticulos.exists()&&archivoarticulos.length()!=0){
             System.out.println("Introduce el código del artículo a modificar:");
-            int codigoBuscado = leer.nextInt();
-            leer.nextLine(); // Limpiar el buffer
+            codigoBuscado = leer.nextInt();
+           
 
             List<String> lineas = new ArrayList<>();
 
             BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
-            String linea;
+            String linea="";
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
-                int codigo = Integer.parseInt(datos[0]);
+                codigo = Integer.parseInt(datos[0]);
 
                 if (codigo == codigoBuscado) {
                     // Modificar el artículo
@@ -235,9 +263,20 @@ public class Articulo extends TiendaDeAbarrotes {
                     String nuevoNombre = leer.nextLine();
                     System.out.println("Introduce el nuevo precio del artículo:");
                     double nuevoPrecio = leer.nextDouble();
+                    provee.get("",1);
+                    
                     linea = codigo + "," + nuevoNombre + "," + nuevoPrecio;
+                    System.out.println("El artículo se ha modificado correctamente.");
+                    lineas.add(linea);
                 }
-                lineas.add(linea);
+                else{
+                    System.out.println("No se encontró ningún articulo con el código especificado.");
+        
+                
+                    
+                }
+                
+                
             }
 
             br.close();
@@ -252,16 +291,24 @@ public class Articulo extends TiendaDeAbarrotes {
 
             pw.close();
 
-            System.out.println("El artículo se ha modificado correctamente.");
+             }else{
+            System.out.println("No hay Articulos registrados, por favor registra primero un ");
+        }
+            
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+       
     }
 
-    public static void mostrarArticulos() {
+    public static void mostrarArticulos() {//No se usa :/
         try {
-            FileWriter crear = new FileWriter(archivoarticulos, true);
+            if (!(archivoarticulos.exists())||archivoarticulos.length() == 0) {
+                System.out.println("No has agregado proveedores aun");
+            }
+            else{
+                FileWriter crear = new FileWriter(archivoarticulos, true);
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoarticulos));
             PrintWriter escribir = new PrintWriter(crear);
             String st;
@@ -272,6 +319,8 @@ public class Articulo extends TiendaDeAbarrotes {
             }
             String[] Arreglo = v.toArray(new String[v.size()]);
             System.out.println(Arreglo[(Arreglo.length - 1)] + "\n");
+            }
+            
 
         } catch (IOException e) {
         }
@@ -306,9 +355,16 @@ public class Articulo extends TiendaDeAbarrotes {
     }
 
     public static void eliminarArticulos() {
+<<<<<<< HEAD
         try {
             BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
             ArrayList<String> lineas = new ArrayList<>();
+=======
+         try {
+             if(archivoarticulos.exists()&&archivoarticulos.length()!=0){
+        BufferedReader br = new BufferedReader(new FileReader("Articulos.txt"));
+        ArrayList<String> lineas = new ArrayList<>();
+>>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
 
             String linea;
             int codigoEliminar;
@@ -348,6 +404,16 @@ public class Articulo extends TiendaDeAbarrotes {
         } catch (IOException e) {
             e.printStackTrace();
         }
+<<<<<<< HEAD
+=======
+         }else{
+            System.out.println("No hay articulos registrados, por favor registra primero un ");
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+>>>>>>> 0fd2eb753e535d80490c9a8435ab3af39889b91f
     }
 
     public void menuArticulosDueno() throws IOException {
@@ -384,5 +450,30 @@ public class Articulo extends TiendaDeAbarrotes {
         } while (respuestaduenoArticulos != 5);
 
     }
+    public boolean validarCodigoArticulo(int codigo) {
+        int codigoArticulo=0;
+    try {
+        BufferedReader br = new BufferedReader(new FileReader(archivoarticulos));
+
+        String linea;
+
+        while ((linea = br.readLine()) != null) {
+            String[] partes = linea.split(",");
+            codigoArticulo = Integer.parseInt(partes[0]);
+
+            if (codigoArticulo == codigo) {
+                br.close();
+                return true; // El código ya existe
+            }
+        }
+
+        br.close();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    return false; // El código no existe
+}
 
 }
