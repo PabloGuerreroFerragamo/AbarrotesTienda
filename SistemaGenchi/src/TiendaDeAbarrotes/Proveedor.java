@@ -325,31 +325,30 @@ public class Proveedor extends TiendaDeAbarrotes {
         } while (respuestaduenoProveedores != 5);
 
     }
-    
-     public boolean validarCodigoProveedor(int codigo) {
-            int codigoArticulo=0;
-    try {
-        BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
 
-        String linea;
+    public boolean validarCodigoProveedor(int codigo) {//Inicio del metodo validarCodigoArticulo que acepta un parametro de tipo int
+        int codigoArticulo = 0;//Inicializacion y creacion de una variable de tipo entero llamada codigoArticulo
+        try {//Inicio de Try-Catch
+            BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));//Creacion de un objeto de tipo BufferedReader para la lectura de un archivo
+            String linea;//Creacion de una variable llamada "linea" de tipo String
 
-        while ((linea = br.readLine()) != null) {
-            String[] partes = linea.split(",");
-            codigoArticulo = Integer.parseInt(partes[0]);
+            while ((linea = br.readLine()) != null) {//Inicio de estructura repetitiva while con condicion: mientras la linea leida sea diferente a "nulo " o "vacio"
+                String[] partes = linea.split(",");//Se crea un arreglo de tipo string llamado "partes" el cual, se asigna el renglon dividido con ayuda de los delimitadores ","
+                codigoArticulo = Integer.parseInt(partes[0]);//Asignacion de valor a la variable llamada "codigoArticulo" que convierte de String a entero el primer registro del renglon dividido que representa el codigo del producto a validar
 
-            if (codigoArticulo == codigo) {
-                br.close();
-                return true; // El código ya existe
-            }
-        }
+                if (codigoArticulo == codigo) {//Primera estructura if con la condicion: Si el codigoArticulo es igual al codigo
+                    br.close();//El objeto llamado "br" se cierra
+                    return true; // Si el codigo existe, se devuelve un booleano "True"
+                }//Cierre del primer if
+            }//Ciere del ciclo while
 
-        br.close();
+            br.close();//Ciere del objeto llamado "br"
 
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
+        } catch (IOException e) {//Cierre del Try-Catch
+            e.printStackTrace();
+        }//Cierre del Try-Catch
 
-    return false; // El código no existe
-}
+        return false; // Si el codigo no existe, se devuelve un booleano "False"
+    }//Fin del metodo validarcodigoArticulo
 
-}
+}//Fin de la clase hija llamada "proveedor" 
