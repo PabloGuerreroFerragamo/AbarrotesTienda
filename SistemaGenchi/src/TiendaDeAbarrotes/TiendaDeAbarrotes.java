@@ -108,7 +108,7 @@ public class TiendaDeAbarrotes {//Clase principal y clase padre
                     llamandoProveedor.menuProveedoresDueno();//Llamada al metodo mnuProveedoresDueno
                     break;//Ruptura de la estructura selectiva Switch
                 case 3://Caso numero 3
-
+                    llamandoArticulos.cerrarVenta();
                     break;//Rompimiento de la estructura Switch
                 case 4://Caso 4
                     menuRoles();//Llamada al metodo miembto llamado menuRoles de la clase TiendaDeAbarrotes (Principal)
