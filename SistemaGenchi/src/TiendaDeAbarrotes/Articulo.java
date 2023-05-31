@@ -54,35 +54,53 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
     }//Fin del metodo get de tipo int que recibe dos variables, uno de tipo int y otro de tipo string
 
     public static void cerrarVenta() throws IOException {//Inicio del metodo cerrarVenta
-        double ganancias=0;
+        double ganancias = 0;
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMMM-yyyy");//Se crea un objeto de tipo SimpleDateFormat llamado "formatofecha" y se insertan parametros de formato de fecha a su constructor de dicho objeto
         String fechaimprimir = formatoFecha.format(new Date());//Variable de tipo String llamado "fechaimprimir" que recibe como parametro una fecha nueva con el formato previamente insertado
         FileWriter creararchivoventafinal = new FileWriter(archivoventafinal, true);//Se crea un objeto de tipo FileWriter llamado crear archivoventafinal
         //acepta dos parametros, la direccion del fichero "archivoventafinal" y un valor booleano que definira si borra el archivo y lo crea en blanco o mantiene sus datos
         PrintWriter escrituraarchivoventafinal = new PrintWriter(creararchivoventafinal);
         BufferedReader lecturaarchivoticket = new BufferedReader(new FileReader(archivoticket));//Creacion de un objeto de tipo BufferedReader llamado "lecturaarchivoicket"
-        Vector<String> v = new Vector(200);
+        BufferedReader lecturaarchivoventafinal = new BufferedReader(new FileReader(archivoventafinal));//Creacion de un objeto de tipo BufferedReader llamado "lecturaarchivoicket"
+        Vector<String> vticket = new Vector(200);
+        Vector<String> vventafinal = new Vector(2);
         String st;
         for (int i = 0; (st = lecturaarchivoticket.readLine()) != null; i++) {
-            v.addElement(st);
+            vticket.addElement(st);
         }
-        String[] Arreglo = v.toArray(new String[v.size()]);
-        String[] partesrenglonfecha = Arreglo[1].split(" ");
-        if(!(partesrenglonfecha[0].equals(formatoFecha.format(new Date())))){
-            System.out.println(ANSI_RED+"\nYa se cerro la venta para este dia, se podra cerrar la venta el dia de manana\n"+ANSI_RESET);
-        }else{
-        System.out.println("Venta Final del dia: " + fechaimprimir+"\n");//Mensaje
-        escrituraarchivoventafinal.print("Venta Final del día: " + fechaimprimir+"\n---------------------------------------------------------");
-        for(int A=0;Arreglo.length>A;A++){
-            String[] partes = Arreglo[A].split(":");
-                    if(partes[0].equalsIgnoreCase("Total a pagar $")){
-                        ganancias+=Double.parseDouble(partes[1]);
+        for (int i = 0; (st = lecturaarchivoventafinal.readLine()) != null; i++) {
+            vventafinal.addElement(st);
+        }
+
+        if (archivoticket.length() != 0||archivoticket.exists()) {
+            String[] Arregloticket = vticket.toArray(new String[vticket.size()]);
+            String[] partesrenglonfechaticket = Arregloticket[1].split(" ");
+            if (archivoventafinal.length() != 0 || archivoventafinal.exists()) {
+                String[] Arregloventafinal = vventafinal.toArray(new String[vventafinal.size()]);
+                String[] partesrenglonfechaVentafinal = Arregloventafinal[0].split(":");
+                if (partesrenglonfechaticket[0].equals(partesrenglonfechaVentafinal[1])||partesrenglonfechaVentafinal[1].equals(formatoFecha.format(new Date()))) {
+                    System.out.println("\n" + ANSI_RED + "Ya se cerro la venta para este dia, se podra cerrar la venta el dia de manana\n" + ANSI_RESET);
+                } else {
+                    System.out.println("Venta Final del dia: " + fechaimprimir + "\n");//Mensaje
+                    escrituraarchivoventafinal.print("Venta Final del día: " + fechaimprimir + "\n---------------------------------------------------------");
+                    for (int T = 0; Arregloticket.length > T; T++) {
+                        String[] partesticket = Arregloticket[T].split(":");
+                        if (partesticket[0].equalsIgnoreCase("Total a pagar $")) {
+                            ganancias += Double.parseDouble(partesticket[1]);
+                        }
                     }
-        }
-        System.out.println(ANSI_RESET+"GANANCIAS TOTALES: "+ANSI_GREEN+ganancias+"$\n"+ANSI_RESET);
-        escrituraarchivoventafinal.println("\nGANANCIAS TOTALES: "+ganancias+"$"+"\n---------------------------------------------------------");
-        escrituraarchivoventafinal.close();
-        creararchivoventafinal.close();
+                    System.out.println(ANSI_RESET + "GANANCIAS TOTALES: " + ANSI_GREEN + ganancias + "$\n" + ANSI_RESET);
+                    escrituraarchivoventafinal.println("\nGANANCIAS TOTALES: " + ganancias + "$" + "\n---------------------------------------------------------");
+                    escrituraarchivoventafinal.close();
+                    creararchivoventafinal.close();
+                    FileWriter borrararchivoticket = new FileWriter(archivoticket, false);//Se crea un objeto de tipo FileWriter llamado creararchivoticket
+
+                }
+            }else{
+                
+            }
+        } else {
+            System.out.println("\n" + ANSI_RED + "No hay tickets guardados para cerrar la venta, no han llegado clientes :c\n" + ANSI_RESET);
         }
     }//Fin del metodo cerrarVenta
 
@@ -173,7 +191,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                     System.out.println("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + " Cantidad: " + partes[3] + "\n");//Se muestra en forma de mensaje el renglon dividido
                     //y concatenando su registro al tipo correspondiente para su interpretacion
                 }//Fin de la estructura repetitiva for
-            } else { //Si la condicion mencionada no es cumplida:
+            } else if (archivocarrito.length() == 0) { //Si la condicion mencionada no es cumplida:
                 System.out.println(ANSI_RED + "NO has comprado aun" + ANSI_RESET);//Se notifica al usuario que no ha comprado aun
             }//Fin de else del if
         } catch (IOException ex) {//Fin del Try e inicio del catch paa atrapar el error que llege a surgir al ejecutar las lineas de codigo anteriores
@@ -199,14 +217,14 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 String[] Arreglo = v.toArray(new String[v.size()]);//Se migran los renglones recopilados del archivocarrito de tipo String del vector "v" a un arreglo de tipo String llamado "Arreglo"
                 System.out.println("Productos en carrito a pagar: ");//Mensaje
                 escribirarchivoticket.print("ABARROTES DON CRETACIO" + "\n");//Se imprime la cabecera del ticket al archivo ticket
-                escribirarchivoticket.println(fechaimprimir + "\n"+"---------------------------------------------------------");//Se imprime la variable "fechaimprimir" que contiene la fecha en la que fue impreso el ticket
+                escribirarchivoticket.println(fechaimprimir + "\n" + "---------------------------------------------------------");//Se imprime la variable "fechaimprimir" que contiene la fecha en la que fue impreso el ticket
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {//Inicio de un ciclo for
                     String[] partes = Arreglo[renglon].split(",");//Se crea un arreglo de tipo string llamado "partesparaescritura" el cual, se asigna el renglon dividido con ayuda de los delimitadores ","
                     System.out.println("Codigo: " + partes[0] + "   Producto: " + partes[1] + " Precio: " + partes[2] + "$  Cantidad: " + partes[3] + "\n");//Se muestra un renglon con la informacion del producto adquirido por el cliente 
                     escribirarchivoticket.print("Codigo: " + partes[0] + " Producto: " + partes[1] + " precio: " + partes[2] + "$ Cantidad: " + partes[3] + "\n");//Se imprime un renglon con la informacion del producto adquirido por el cliente al archivoticket
                     totalapagar += (Double.parseDouble(partes[2]) * Double.parseDouble(partes[3]));//Se va concatenando y almacenando a la variable totalapagar el valor de la multiplicacion del precio de cada producto por la cantidadelegida por el usuario
                 }//Se termina la estructura for hasta que ya no haya productos en carrito
-                escribirarchivoticket.print("---------------------------------------------------------"+"\n" + "Total a pagar $: " + totalapagar + "\n"+"_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n");//Se imprime el precio total al archivoticket
+                escribirarchivoticket.print("---------------------------------------------------------" + "\n" + "Total a pagar $: " + totalapagar + "\n" + "_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-\n");//Se imprime el precio total al archivoticket
                 System.out.println("Total a pagar: " + totalapagar + "$");//Se muestra el precio total
                 escribirarchivoticket.close();//Se cierra el objeto llamado "escribirarchivoticket"
                 creararchivoticket.close();//Se cierra el objeto llamado "creararchivoticket"

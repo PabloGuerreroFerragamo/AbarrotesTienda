@@ -1,4 +1,1 @@
-1,Leche,25.0,65,Nestle
-2,PanGrande,35.0,95,Bimbo
-3,Leche_Carnation_250ml,30.0,98,Nestle
-4,Pan_Nito_125gr,12.0,48,Bimbo
+1,Leche,15.0,43,Nestle

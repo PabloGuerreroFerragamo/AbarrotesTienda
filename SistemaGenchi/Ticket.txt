@@ -1,25 +1,7 @@
 ABARROTES DON CRETACIO
-31-mayo-2023 03:55:47
+31-mayo-2023 01:16:49
 ---------------------------------------------------------
-Codigo: 1 Producto: Leche precio: 25.0$ Cantidad: 2
-Codigo: 2 Producto: PanGrande precio: 35.0$ Cantidad: 2
+Codigo: 1 Producto: Leche precio: 15.0$ Cantidad: 2
 ---------------------------------------------------------
-Total a pagar $: 120.0
-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-ABARROTES DON CRETACIO
-31-mayo-2023 04:03:31
----------------------------------------------------------
-Codigo: 1 Producto: Leche precio: 25.0$ Cantidad: 1
-Codigo: 2 Producto: PanGrande precio: 35.0$ Cantidad: 2
-Codigo: 3 Producto: Leche_Carnation_250ml precio: 30.0$ Cantidad: 2
-Codigo: 4 Producto: Pan_Nito_125gr precio: 12.0$ Cantidad: 2
----------------------------------------------------------
-Total a pagar $: 179.0
-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-ABARROTES DON CRETACIO
-31-mayo-2023 04:45:54
----------------------------------------------------------
-Codigo: 1 Producto: Leche precio: 25.0$ Cantidad: 30
----------------------------------------------------------
-Total a pagar $: 750.0
+Total a pagar $: 30.0
 _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
