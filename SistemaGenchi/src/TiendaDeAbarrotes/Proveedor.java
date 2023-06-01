@@ -4,88 +4,89 @@ import java.io.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 
-public class Proveedor extends TiendaDeAbarrotes {
+public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la clase TiendaDeAbarrotes
 
+    //Instancias
     Scanner leerint = new Scanner(System.in);
     Scanner leer = new Scanner(System.in);
     public static File archivoProveedores = new File("Proveedores.txt");
 
-    //NOTA: Mediante estas 3 variables de abajo se accede a la informacion en especifico de cada objeto Proveedores
+    //Declaracion de variables
     String empresaProveedor;
     String ubicacionProveedor;
     String correoElectronico;
-
-    Proveedor[] arregloProveedores = new Proveedor[100]; // Se puede cambiar el tamaño del arreglo según se necesite
     static int numProveedores = 0;
     int contadorProveedores = 0;
 
-    public Proveedor(int Codigo, String Nombre, String Empresa) {
+    public Proveedor(int Codigo, String Nombre, String Empresa) {//Se define el constructor recibe parametros y asigna valores a las variables de instancia.
         super(Codigo, Nombre);
-        this.empresaProveedor = Empresa;
+        this.empresaProveedor = Empresa;//Asigna el valor del parámetro Empresa al atributo empresaProveedor
     }
 
-    int get(int Codi) {
+    int get(int Codi) {//Este método solicita al usuario que ingrese el ID del proveedor y devuelve el valor ingresado.
         System.out.print("Ingrese el ID del proveedor: ");
         codigo = leerint.nextInt();
         return codigo;
     }
 
-    String get(String Nombre) {
+    String get(String Nombre) {//Este método solicita al usuario que ingrese el nombre del proveedor y devuelve el valor ingresado.
         System.out.print("Ingrese el nombre del proveedor: ");
         leer.nextLine();
         nombre = leer.nextLine();
         return nombre;
     }
 
-    String getEmpresa() {
+    String getEmpresa() {//Este método solicita al usuario que ingrese el nombre de la empresa del proveedor y devuelve el valor ingresado.
         System.out.print("Ingrese la empresa del proveedor: ");
         empresaProveedor = leer.nextLine();
         return empresaProveedor;
     }
 
-    String getCorreoE() {
+    String getCorreoE() {//Este método solicita al usuario que ingrese el correo electrónico del proveedor y devuelve el valor ingresado.
         System.out.print("Ingrese el correo electronico del proveedor: ");
         correoElectronico = leer.nextLine();
         return correoElectronico;
     }
 
-    String getUbicacion() {
+    String getUbicacion() {//Este método solicita al usuario que ingrese la ubicación del proveedor y devuelve el valor ingresado.
         System.out.print("Ingrese la ubicacion del proveedor: ");
         ubicacionProveedor = leer.nextLine();
         return ubicacionProveedor;
     }
 
-    void agregarProveedores() throws IOException {
+    void agregarProveedores() throws IOException {//Este método permite agregar proveedores, en un archivo llamado "Proveedores.txt". 
 
         try {
-            FileWriter fw = new FileWriter("Proveedores.txt", true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            pw.print(get(1));
-            if (validarCodigoProveedor(codigo)) {
+             
+            FileWriter fw = new FileWriter("Proveedores.txt", true);// Abre el archivo "Proveedores.txt" en modo de escritura (true indica que se añadirán los datos al final del archivo si existe)
+            BufferedWriter bw = new BufferedWriter(fw);// // Crea un buffer de escritura para mejorar el rendimiento al escribir en el archivo
+            PrintWriter pw = new PrintWriter(bw);  // Crea un objeto PrintWriter para escribir en el archivo de manera conveniente
+            pw.print(get(1));// Escribe en el archivo el resultado de la función get(1)
+            if (validarCodigoProveedor(codigo)) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
                 System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
                 return;
             }
+            // Escribe en el archivo los resultados de las siguientes haciendo uso de polimorfismo mediante las funciones get()
             pw.print("," + get(""));
             pw.print("," + getEmpresa());
             pw.print("," + getCorreoE());
             pw.print("," + getUbicacion() + "\n");
-            numProveedores++;
+            numProveedores++; // Incrementa el contador de proveedores
 
-            pw.close();
-        } catch (Exception e) {
+            pw.close();// Cierra el objeto PrintWriter para liberar los recursos
+        } catch (Exception e) {//Muestra un mensaje de error en caso de que ocurra una excepción
             JOptionPane.showMessageDialog(null, e);
         }
         System.out.println("Proveedor agregado con exito:\n");
-        FileWriter crear = new FileWriter(archivoProveedores, true);
-        BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));
+        FileWriter crear = new FileWriter(archivoProveedores, true);// Abre el archivo "archivoProveedores" en modo de escritura (true indica que se añadirán los datos al final del archivo si existe)
+        BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));// Crea un buffer de lectura para mejorar el rendimiento al leer el archivo
         String st;
-        Vector<String> v = new Vector(40);
-        for (int i = 0; (st = brCablon.readLine()) != null; i++) {
+        Vector<String> v = new Vector(40);// Crea un vector de tamaño 40 para almacenar las líneas del archivo
+        for (int i = 0; (st = brCablon.readLine()) != null; i++) {// Lee las líneas del archivo y las agrega al vector
             v.addElement(st);
         }
-        String[] Arreglo = v.toArray(new String[v.size()]);
-        String[] partesparamostrar = Arreglo[Arreglo.length - 1].split(",");
+        String[] Arreglo = v.toArray(new String[v.size()]);// Convierte el vector en un arreglo de cadenas
+        String[] partesparamostrar = Arreglo[Arreglo.length - 1].split(",");// Divide la última línea del arreglo en partes utilizando como separador la coma ","
         System.out.println("ID del Proveedor: " + partesparamostrar[0] + "    Nombre del proveedor: " + partesparamostrar[1] + "    Empresa del proveedor: " + partesparamostrar[2] + "    Correo E.:  " + partesparamostrar[3] + "    Ubicacion:  " + partesparamostrar[4] + "\n");
 
     }
@@ -93,73 +94,73 @@ public class Proveedor extends TiendaDeAbarrotes {
     void mostrarProveedores() {
         System.out.println(ANSI_GREEN + "_-_-_-_-_-_-_-_-_Proveedores Existentes_-_-_-_-_-_-_-_-_");
         try {
-            FileWriter crear = new FileWriter(archivoProveedores, true);
-            BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));
+            FileWriter crear = new FileWriter(archivoProveedores, true);// Abre el archivo "archivoProveedores" en modo de escritura (true indica que se añadirán los datos al final del archivo si existe)
+            BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));// Crea un buffer de lectura para mejorar el rendimiento al leer el archivo
             String st;
-            Vector<String> v = new Vector(40);
-            for (int i = 0; (st = brCablon.readLine()) != null; i++) {
+            Vector<String> v = new Vector(40);// Crea un vector de tamaño 40 para almacenar las líneas del archivo
+            for (int i = 0; (st = brCablon.readLine()) != null; i++) {// Lee las líneas del archivo y las agrega al vector
                 v.addElement(st);
             }
-            String[] Arreglo = v.toArray(new String[v.size()]);
-            if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {
+            String[] Arreglo = v.toArray(new String[v.size()]);// Convierte el vector en un arreglo de cadenas
+            if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {//Verifica si se han agregado proveedores
                 System.out.println(ANSI_RED + "No has agregado proveedores aun" + ANSI_RESET);
             } else {
-                for (int renglon = 0; Arreglo.length > renglon; renglon++) {
+                for (int renglon = 0; Arreglo.length > renglon; renglon++) {// Muestra en pantalla la información de todos los proveedores exitentes
                     String[] partesparamostrar = Arreglo[renglon].split(",");
                     System.out.println("\nID del Proveedor: " + partesparamostrar[0] + "    Nombre del proveedor: " + partesparamostrar[1] + "    Empresa del proveedor: " + partesparamostrar[2] + "    Correo E.:  " + partesparamostrar[3] + "    Ubicacion:  " + partesparamostrar[4] + "\n");
                 }
             }
 
-        } catch (IOException e) {
+        } catch (IOException e) {//Muestra un mensaje de error en caso de que ocurra una excepción
         }
         System.out.println("");
     }
 
     void eliminarProveedores() {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));
-            ArrayList<String> lineas = new ArrayList<>();
+            BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));// Crea un buffer de lectura para mejorar el rendimiento al leer el archivo
+            ArrayList<String> lineas = new ArrayList<>();//Crea una lista para almacenar las líneas del archivo
 
             String linea;
             int codigoEliminar;
 
-            mostrarProveedores();
+            mostrarProveedores();//Llama al metodo mostrarProveedores
 
             System.out.println("Introduce el código del proveedor a eliminar:");
             codigoEliminar = leer.nextInt();
 
             boolean encontrado = false;
 
-            while ((linea = br.readLine()) != null) {
-                String[] partes = linea.split(",");
-                int codigo = Integer.parseInt(partes[0]);
+            while ((linea = br.readLine()) != null) {// Lee cada línea del archivo
+                String[] partes = linea.split(","); // Divide la línea en partes utilizando como separador la coma ","
+                int codigo = Integer.parseInt(partes[0]);// Obtiene el código del proveedor de la primera parte
 
-                if (codigo == codigoEliminar) {
+                if (codigo == codigoEliminar) {//Si se encuentra el proveedor a eliminar, se marca como encontrado
                     encontrado = true;
                     System.out.println("El siguiente proveedor ha sido eliminado:");
                     System.out.println(linea);
-                    numProveedores--;
-                } else {
+                    numProveedores--;// Decrementa el contador de proveedores
+                } else {// Si no es el proveedor a eliminar, se agrega a la lista de lineas
                     lineas.add(linea);
                 }
             }
 
-            br.close();
+            br.close();// Cierra el objeto BufferedReader para liberar los recursos
 
             if (!encontrado) {
                 System.out.println("No se encontró ningún proveedor con el código especificado");
             } else {
-                PrintWriter piw = new PrintWriter(new FileWriter(archivoProveedores));
+                PrintWriter piw = new PrintWriter(new FileWriter(archivoProveedores));// Crea un objeto PrintWriter para escribir en el archivo "archivoProveedores"
 
-                for (String articulo : lineas) {
+                for (String articulo : lineas) {// Escribe en el archivo todas las lineas de proveedores que no fueron eliminadas
                     piw.println(articulo);
 
-                    piw.close();
+                    piw.close();// Cierra el objeto PrintWriter para liberar los recursos
 
                 }
 
             }
-        } catch (IOException e) {
+        } catch (IOException e) { // En caso de que ocurra una excepción de tipo IOException, muestra el stack trace del error
             e.printStackTrace();
         }
     }
