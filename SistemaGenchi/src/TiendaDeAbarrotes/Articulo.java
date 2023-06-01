@@ -68,36 +68,44 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
         for (int i = 0; (st = lecturaarchivoticket.readLine()) != null; i++) {
             vticket.addElement(st);
         }
+
+        String[] Arregloticket = vticket.toArray(new String[vticket.size()]);
+        for (int T = 0; Arregloticket.length > T; T++) {
+            String[] partesticket = Arregloticket[T].split(":");
+            if (partesticket[0].equalsIgnoreCase("Total a pagar $")) {
+                ganancias += Double.parseDouble(partesticket[1]);
+            }
+        }
         for (int i = 0; (st = lecturaarchivoventafinal.readLine()) != null; i++) {
             vventafinal.addElement(st);
         }
 
-        if (archivoticket.length() != 0||archivoticket.exists()) {
-            String[] Arregloticket = vticket.toArray(new String[vticket.size()]);
+        if (archivoticket.length() != 0 && archivoticket.exists() && archivoventafinal.exists()) {
+            String[] Arregloventafinal = vventafinal.toArray(new String[vventafinal.size()]);
             String[] partesrenglonfechaticket = Arregloticket[1].split(" ");
-            if (archivoventafinal.length() != 0 || archivoventafinal.exists()) {
-                String[] Arregloventafinal = vventafinal.toArray(new String[vventafinal.size()]);
-                String[] partesrenglonfechaVentafinal = Arregloventafinal[0].split(":");
-                if (partesrenglonfechaticket[0].equals(partesrenglonfechaVentafinal[1])||partesrenglonfechaVentafinal[1].equals(formatoFecha.format(new Date()))) {
-                    System.out.println("\n" + ANSI_RED + "Ya se cerro la venta para este dia, se podra cerrar la venta el dia de manana\n" + ANSI_RESET);
-                } else {
-                    System.out.println("Venta Final del dia: " + fechaimprimir + "\n");//Mensaje
-                    escrituraarchivoventafinal.print("Venta Final del día: " + fechaimprimir + "\n---------------------------------------------------------");
-                    for (int T = 0; Arregloticket.length > T; T++) {
-                        String[] partesticket = Arregloticket[T].split(":");
-                        if (partesticket[0].equalsIgnoreCase("Total a pagar $")) {
-                            ganancias += Double.parseDouble(partesticket[1]);
-                        }
-                    }
-                    System.out.println(ANSI_RESET + "GANANCIAS TOTALES: " + ANSI_GREEN + ganancias + "$\n" + ANSI_RESET);
-                    escrituraarchivoventafinal.println("\nGANANCIAS TOTALES: " + ganancias + "$" + "\n---------------------------------------------------------");
-                    escrituraarchivoventafinal.close();
-                    creararchivoventafinal.close();
-                    FileWriter borrararchivoticket = new FileWriter(archivoticket, false);//Se crea un objeto de tipo FileWriter llamado creararchivoticket
-
+            if (archivoventafinal.length() == 0) {
+                System.out.println("Venta Final del dia: " + fechaimprimir + "\n");//Mensaje
+                System.out.println(ANSI_RESET + "GANANCIAS TOTALES: " + ANSI_GREEN + ganancias + "$\n" + ANSI_RESET);
+                escrituraarchivoventafinal.print("Venta Final del día: " + fechaimprimir + "\n---------------------------------------------------------");
+                escrituraarchivoventafinal.println("\nGANANCIAS TOTALES: " + ganancias + "$" + "\n---------------------------------------------------------");
+                escrituraarchivoventafinal.close();
+                for (int i = 0; (st = lecturaarchivoventafinal.readLine()) != null; i++) {
+                    vventafinal.addElement(st);
+                    
                 }
-            }else{
-                
+                FileWriter borrararchivoticket = new FileWriter(archivoticket, false);//Se crea un objeto de tipo FileWriter llamado borrararchivoticket
+                menuRoles();
+            }
+            String[] partesrenglonfechaVentafinal = Arregloventafinal[0].split(":");
+            if (!(partesrenglonfechaticket[0].equals(partesrenglonfechaVentafinal[1])) && !(partesrenglonfechaVentafinal[1].equals(formatoFecha.format(new Date())))) {
+                System.out.println("\n" + ANSI_RED + "Ya se cerro la venta para este dia, se podra cerrar la venta el dia de manana\n" + ANSI_RESET);
+            } else {
+                System.out.println("Venta Final del dia: " + fechaimprimir + "\n");//Mensaje
+                System.out.println(ANSI_RESET + "GANANCIAS TOTALES: " + ANSI_GREEN + ganancias + "$\n" + ANSI_RESET);
+                escrituraarchivoventafinal.print("Venta Final del día: " + fechaimprimir + "\n---------------------------------------------------------");
+                escrituraarchivoventafinal.println("\nGANANCIAS TOTALES: " + ganancias + "$" + "\n---------------------------------------------------------");
+                escrituraarchivoventafinal.close();
+                creararchivoventafinal.close();
             }
         } else {
             System.out.println("\n" + ANSI_RED + "No hay tickets guardados para cerrar la venta, no han llegado clientes :c\n" + ANSI_RESET);
@@ -157,6 +165,9 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                                     break;//Ruptura del Switch
                             }//Fin del Switch
                         }//Fin del if secundario
+                        else{
+                            System.out.println(ANSI_RED+"No puedes adquirir una cantidad mayor a la disponible, intentalo de nuevo\n"+ANSI_RESET);  
+                        }
                     }//Fin del if primario
                 }//Fin del for
             } while (!(productoelegido.equalsIgnoreCase("x")));//Fin del do while con una condicion: si el productoelegido NO es igual al caracter 'x'
