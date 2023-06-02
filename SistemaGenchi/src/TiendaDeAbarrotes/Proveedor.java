@@ -18,15 +18,15 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     static int numProveedores = 0;
     int contadorProveedores = 0;
 
-    public Proveedor(int Codigo, String Nombre, String Empresa) {//Se define el constructor recibe parametros y asigna valores a las variables de instancia.
+    public Proveedor(String Codigo, String Nombre, String Empresa) {//Se define el constructor recibe parametros y asigna valores a las variables de instancia.
         super(Codigo, Nombre);
         this.empresaProveedor = Empresa;//Asigna el valor del parámetro Empresa al atributo empresaProveedor
     }
 
     int get(int Codi) {//Este método solicita al usuario que ingrese el ID del proveedor y devuelve el valor ingresado.
         System.out.print("Ingrese el ID del proveedor: ");
-        codigo = leerint.nextInt();
-        return codigo;
+        codigo = leer.nextLine();
+        return Integer.parseInt(codigo);
     }
 
     String get(String Nombre) {//Este método solicita al usuario que ingrese el nombre del proveedor y devuelve el valor ingresado.
@@ -57,12 +57,12 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     void agregarProveedores() throws IOException {//Este método permite agregar proveedores, en un archivo llamado "Proveedores.txt". 
 
         try {
-             
+
             FileWriter fw = new FileWriter("Proveedores.txt", true);// Abre el archivo "Proveedores.txt" en modo de escritura (true indica que se añadirán los datos al final del archivo si existe)
             BufferedWriter bw = new BufferedWriter(fw);// // Crea un buffer de escritura para mejorar el rendimiento al escribir en el archivo
             PrintWriter pw = new PrintWriter(bw);  // Crea un objeto PrintWriter para escribir en el archivo de manera conveniente
             pw.print(get(1));// Escribe en el archivo el resultado de la función get(1)
-            if (validarCodigoProveedor(codigo)) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
+            if (validarCodigoProveedor(Integer.parseInt(codigo))) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
                 System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
                 return;
             }
@@ -92,7 +92,6 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     }
 
     void mostrarProveedores() {
-        System.out.println(ANSI_GREEN + "_-_-_-_-_-_-_-_-_Proveedores Existentes_-_-_-_-_-_-_-_-_");
         try {
             FileWriter crear = new FileWriter(archivoProveedores, true);// Abre el archivo "archivoProveedores" en modo de escritura (true indica que se añadirán los datos al final del archivo si existe)
             BufferedReader brCablon = new BufferedReader(new FileReader(archivoProveedores));// Crea un buffer de lectura para mejorar el rendimiento al leer el archivo
@@ -103,8 +102,9 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             }
             String[] Arreglo = v.toArray(new String[v.size()]);// Convierte el vector en un arreglo de cadenas
             if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {//Verifica si se han agregado proveedores
-                System.out.println(ANSI_RED + "No has agregado proveedores aun" + ANSI_RESET);
+                System.out.println("\n"+ANSI_RED + "No has agregado proveedores aun\n" + ANSI_RESET);
             } else {
+                System.out.println(ANSI_GREEN + "_-_-_-_-_-_-_-_-_Proveedores Existentes_-_-_-_-_-_-_-_-_");
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {// Muestra en pantalla la información de todos los proveedores exitentes
                     String[] partesparamostrar = Arreglo[renglon].split(",");
                     System.out.println("\nID del Proveedor: " + partesparamostrar[0] + "    Nombre del proveedor: " + partesparamostrar[1] + "    Empresa del proveedor: " + partesparamostrar[2] + "    Correo E.:  " + partesparamostrar[3] + "    Ubicacion:  " + partesparamostrar[4] + "\n");
@@ -218,9 +218,9 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
         elSwichNoSirve = 0;
     }
 
-    String get(String lisboa, int popola) {
+    String get(String proveedor, int ola) {
         String selccionProveedor = "";
-        int codigoBuscado;
+        String codigoBuscado;
 
         if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {
             System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
@@ -228,8 +228,13 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             mostrarProveedores();
         }
         try {
-            System.out.print("Ingrese el codigo del proveedor, que proporcionara este producto: ");
-            codigoBuscado = leer.nextInt();
+            System.out.print(ANSI_GREEN+"Ingrese el codigo del proveedor, que proporcionara este producto: "+ANSI_RESET);
+            System.out.println("\n(Para cancelar la operacion, ingrese 'X')");
+            codigoBuscado = leer.next();
+            if (codigoBuscado.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+            llamador.menuArticulosDueno();
+        }
             leer.nextLine(); // Limpiar el buffer
 
             List<String> lineas = new ArrayList<>();
@@ -240,9 +245,12 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 int codigo = Integer.parseInt(datos[0]);
 //            int codigoProveedor=leerint.nextInt();
                 int posicionProveedor = -1;
-                if (codigo == codigoBuscado) {
+                if (codigo == Integer.parseInt(codigoBuscado)) {
                     mostrarArticuloPorCodigo(codigo);
                     selccionProveedor = empresaProveedor;
+                }
+                else{
+                    System.out.println(ANSI_RED+"No existe ese proveedor, intentalo de nuevo\n"+ANSI_RESET);
                 }
             }
             br.close();
@@ -253,7 +261,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 pw.println(line);
             }
             pw.close();
-            System.out.println("El proveedor se ha seleccionado correctamente.");
+            System.out.println(ANSI_GREEN+"El proveedor se ha seleccionado correctamente.\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -275,8 +283,8 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 if (codigoArticulo == codigo) {
                     encontrado = true;
                     empresaProveedor = partes[2];
-                    System.out.println("Proveedor encontrado:");
-                    System.out.println("Código: " + partes[0]);
+                    System.out.println(ANSI_GREEN+"Proveedor encontrado:"+ANSI_RESET);
+                    System.out.println("Codigo: " + partes[0]);
                     System.out.println("Nombre: " + partes[1]);
                     System.out.println("Nombre de la empresa: " + partes[2]);
                     break;
