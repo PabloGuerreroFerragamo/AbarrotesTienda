@@ -16,41 +16,61 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
     public static File archivoproveedores = new File("Proveedores.txt");
     public static File archivoventafinal = new File("VentaFinal.txt");
 
-    Proveedor provee = new Proveedor(1, "", "");//Objeto de la clase Proveedor llamada "provee" con valores introducidos manualmente
-    double precio;//Variable de tipo Double Publica llamada "precio"
-    int stock;//Variable de tipo int Publica llamada "Stock"
+    Proveedor provee = new Proveedor("", "", "");//Objeto de la clase Proveedor llamada "provee" con valores introducidos manualmente
+    String precio;//Variable de tipo String Publica llamada "precio"
+    String stock;//Variable de tipo String Publica llamada "Stock"
 
-    public Articulo(int codigo, String nombre) {//Constructor de la clase Articulo
+    public Articulo(String codigo, String nombre) {//Constructor de la clase Articulo
         super(codigo, nombre);//Acceso a las variables padre de la clase padre "TiendaDeAbarrotes"
     }//Fin del constructor
 //Los gets y polimorfismo
 
-    public int get(int Codigo) {//Inicio del metodo get de tipo entero, recibe una variable de tipo entero
+    public int get(int Codigo) throws IOException {//Inicio del metodo get de tipo entero, recibe una variable de tipo entero
         leer.nextLine();//Limpieza del buffer del Scanner leer
         System.out.println("Introduce el codigo del nuevo producto:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);//Solicitud de introduccion del codigo
-        codigo = leer.nextInt();//Asignacion de la respuesta del usuario a la variable codigo
-        return codigo;//Devolucion del valor de la variable codigo
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
+        codigo = leer.next();//Asignacion de la respuesta del usuario a la variable codigo
+        if (codigo.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+            menuArticulosDueno();
+        }
+        return Integer.parseInt(codigo);//Devolucion del valor de la variable codigo
     }//Fin del metodo get de tipo entero que recibe una variable de tipo entera 
 
-    public String get(String Nombre) {//Inicio del metodo get de tipo String, recibe una variable de tipo String
+    public String get(String Nombre) throws IOException {//Inicio del metodo get de tipo String, recibe una variable de tipo String
         leer.nextLine();//limpieza del scanner
         System.out.println("Introduce el nombre del nuevo producto:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);//Solicitud de introduccion del nombre
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
         nombre = leer.next();//Asignacion de la respuesta del usuario a la variable nombre
+        if (nombre.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+            menuArticulosDueno();
+        }
         return nombre;//Devolucion de la variable nombre
     }//Fin del metodo get de tipo String que recibe una variable de tipo String
 
-    public double get(double Precio) {//inicio del metodo get de tipo double, recibe una variable de tipo Double
+    public double get(double Precio) throws IOException {//inicio del metodo get de tipo double, recibe una variable de tipo Double
         leer.nextLine();//Limpieza del scanner
         System.out.println("Introduce el precio del nuevo producto:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);//Solicitud de introduccion del precio
-        precio = leer.nextDouble();//Se asigna el valor ingresado por el usuario a la variable precio
-        return precio;//Devolucion de la variable precio
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
+        precio = leer.next();//Se asigna el valor ingresado por el usuario a la variable precio
+        if (precio.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+            menuArticulosDueno();
+        }
+        return Double.parseDouble(precio);//Devolucion de la variable precio
     }//Fin del metodo get de tipo Double que recibe una variable de tipo Double
 
-    public int get(int Cantidad, String Ola) {//Inicio del metodo get de tipo int, recibe dos variables de tipo int y String respectivamente
+    public int get(int Cantidad, String Ola) throws IOException {//Inicio del metodo get de tipo int, recibe dos variables de tipo int y String respectivamente
         leer.nextLine();//limpieza del scanner
         System.out.println("Introduce la cantidad de nuevo producto:        " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);//Solicitud de introduccion de la cantidad
-        stock = leer.nextInt();//Se asigna el valor introducido por el usuario a la variable stock
-        return stock;//Se devuelve la variable stock
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
+        stock = leer.next();//Se asigna el valor introducido por el usuario a la variable stock
+        if (stock.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+            menuArticulosDueno();
+        }
+        return Integer.parseInt(stock);//Se devuelve la variable stock
     }//Fin del metodo get de tipo int que recibe dos variables, uno de tipo int y otro de tipo string
 
     public static void cerrarVenta() throws IOException {//Inicio del metodo cerrarVenta
@@ -91,7 +111,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 escrituraarchivoventafinal.close();
                 for (int i = 0; (st = lecturaarchivoventafinal.readLine()) != null; i++) {
                     vventafinal.addElement(st);
-                    
+
                 }
                 FileWriter borrararchivoticket = new FileWriter(archivoticket, false);//Se crea un objeto de tipo FileWriter llamado borrararchivoticket
                 menuRoles();
@@ -108,7 +128,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 creararchivoventafinal.close();
             }
         } else {
-            System.out.println("\n" + ANSI_RED + "No hay tickets guardados para cerrar la venta, no han llegado clientes :c\n" + ANSI_RESET);
+            System.out.println("\n" + ANSI_RED + "No hay tickets guardados para cerrar la venta, no han llegado "+ANSI_PURPLE+"clientes"+ANSI_RED+" :c\n" + ANSI_RESET);
         }
     }//Fin del metodo cerrarVenta
 
@@ -121,6 +141,10 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
             BufferedReader lecturaarchivoarticulos = new BufferedReader(new FileReader(archivoarticulos));//Creacion de un objeto de tipo BufferedReader llamado "lecturaarchivoarticulos"
             PrintWriter escrituraarchivocarrito = new PrintWriter(creaarchivocarrito);//Creacion de un objeo de tipo PrintWriter llamado "escrituraarchivocarrito"
             PrintWriter escrituraarchivoarticulos = new PrintWriter(creararchivoarticulos);//Creacion de un objeto de tipo PrintWriter llamado "escrituraarchivoarticulos"
+            if(archivoarticulos.length()==0){
+                System.out.println(ANSI_RED+"No hay ningun articulo, el"+ANSI_GREEN+" Dueno "+ANSI_RED+"no ha anadido articulos >:c");
+                menuCliente();
+            }
             String st;//Creacion de una variable de tipo String
             Vector<String> v = new Vector(40);//Creacion de un vector llamado v que almacenara datos de tipo String con un tamano inicial de 40 posiciones
             for (int i = 0; (st = lecturaarchivoarticulos.readLine()) != null; i++) {//Inicio de una estructura repetitiva for
@@ -138,6 +162,9 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 }//Fin del ciclo for
                 System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):" + "\n");//Mensaje solicitando al usuario que ingrese el nombre del producto a adquirir
                 productoelegido = leerProducto.nextLine();//El nombre introducido por el usuario se asigna a la variable "productoelegido"
+                if(productoelegido.equalsIgnoreCase("X")){
+                    menuCliente();
+                }
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {//Inicio de una estructura repetitiva for
                     copiarenglon = Arreglo[renglon];//Del arreglo "Arreglo" se copia el valor o renglon a una vaiable de tipo String llamado "copiarrenglon"
                     String[] partesparaescritura = Arreglo[renglon].split(",");//Se crea un arreglo de tipo string llamado "partesparaescritura" el cual, se asigna el renglon dividido con ayuda de los delimitadores ","
@@ -165,8 +192,8 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                                     break;//Ruptura del Switch
                             }//Fin del Switch
                         }//Fin del if secundario
-                        else{
-                            System.out.println(ANSI_RED+"No puedes adquirir una cantidad mayor a la disponible, intentalo de nuevo\n"+ANSI_RESET);  
+                        else {
+                            System.out.println(ANSI_RED + "No puedes adquirir una cantidad mayor a la disponible, intentalo de nuevo\n" + ANSI_RESET);
                         }
                     }//Fin del if primario
                 }//Fin del for
@@ -257,7 +284,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 BufferedWriter bw = new BufferedWriter(fw);//Creacion de un objeto de tipo BufferedWriter llamado "bw"
                 PrintWriter pw = new PrintWriter(bw);//Creacion de un objeo de tipo PrintWriter llamado "pw"
                 pw.print(get(1));//Llamada al metodo get de tipo entero que recibe un parametro de tipo entero, al terminar de llamar escribe al archivo articulos lo que devuelve el metodo, es decir, el codigo
-                if (validarCodigoArticulo(codigo)) {//Segunda estructura if con condicion: Si la validacion del codigo es verdadera
+                if (validarCodigoArticulo(Integer.parseInt(codigo))) {//Segunda estructura if con condicion: Si la validacion del codigo es verdadera
                     System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");//Mensaje al usuario
                     return;//Se regresa
                 }//Fin de la segunda estructura if
@@ -270,10 +297,10 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
             } catch (Exception e) {//Fin del Try y apertura del catch
                 JOptionPane.showMessageDialog(null, e);
             }//Fin del catch
-            System.out.println("Se ha anadido el siguiente articulo al inventario:");//Mensaje de confirmacion
+            System.out.println("Se ha anadido el siguiente articulo al inventario:\n");//Mensaje de confirmacion
             mostrarArticulos();//Se llama al metodo mostrarArticulos
         } else {//Fin de la primera estructura if y abertura del else de dciha estructura
-            System.out.println(ANSI_RED + "No hay proveedores registrados, por favor registra primero un proveedor" + ANSI_GREEN);//Mensaje de advertencia
+            System.out.println("\n" + ANSI_RED + "No hay proveedores registrados, por favor registra primero un proveedor\n" + ANSI_GREEN);//Mensaje de advertencia
         }//Fin del else
     }//Fin del metodo anadirArticulo
 
@@ -322,7 +349,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 pw.close();//Se cierra el objeto llamado "pw"
 
             } else {//Fin de la primer estructura if y apertura del else de dicha estructura if
-                System.out.println("No hay Articulos registrados, por favor registra primero uno");//Mensaje de aviso al usuario
+                System.out.println("\n" + ANSI_RED + "No hay Articulos registrados, por favor registra primero uno\n" + ANSI_GREEN);//Mensaje de aviso al usuario
             }//Fin del else
         } catch (IOException e) {//Fin del Try y apertura del catch para atrapar el error que llegue a surgir al ejecutar las lineas de codigo anteriores
             e.printStackTrace();
@@ -343,7 +370,8 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                     v.addElement(st);//Se anade un renglon al vector "v" del archivo "archivoarticulos"
                 }//Fin del ciclo for
                 String[] Arreglo = v.toArray(new String[v.size()]);//Se migran los renglones recopilados del archivoarticulos de tipo String del vector "v" a un arreglo de tipo String llamado "Arreglo"
-                System.out.println(Arreglo[(Arreglo.length - 1)] + "\n");//Se muestra el ultimo renglon de la copia fiel del archivoarticulos
+                String[] partesparamostrar = Arreglo[Arreglo.length - 1].split(",");//Se divide el renglon contenido en el arreglo de tipo String con ayuda de los delimitadores ","
+                System.out.println("Codigo: " + partesparamostrar[0] + "      Producto: " + partesparamostrar[1] + "        Precio: " + partesparamostrar[2] + "$         Stock: " + partesparamostrar[3] + "    Empresa del proveedor: " + partesparamostrar[4] + "\n");
             }//Fin del else de la primer estructura
 
         } catch (IOException e) {//Fin del Try y abertura del catch
@@ -409,7 +437,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                     pw.close();//Cierre del objeto "pw"
                 }//Fin del else de la tercer estructura if
             } else {//Inicio del else de la primer estructura if 
-                System.out.println("No hay articulos registrados, por favor registra primero uno");//Mensaje de aviso al usuario
+                System.out.println("\n" + ANSI_RED + "No hay articulos registrados, por favor registra primero uno\n" + ANSI_GREEN);//Mensaje de aviso al usuario
             }//Cierre del else de la primer estructura if
 
         } catch (IOException e) {//Cierre del Try-Catch
