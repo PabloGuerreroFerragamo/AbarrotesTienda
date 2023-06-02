@@ -24,13 +24,13 @@ public class TiendaDeAbarrotes {//Clase principal y clase padre
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
     //Colores para la consola (Solo para dar diseno)
 
-    public static Articulo llamador = new Articulo(1, "");//Instancia a la clase Articulo
+    public static Articulo llamador = new Articulo("", "");//Instancia a la clase Articulo
     public static Scanner leer = new Scanner(System.in); //Objeto de tipo Scanner llamado "Leer"
     public static Scanner leerProducto = new Scanner(System.in);//Objeto de tipo
-    int codigo; //Variable de tipo entera Publica llamada "codigo"
+    String codigo; //Variable de tipo entera Publica llamada "codigo"
     String nombre;//Variable de tipo String Publica llamada "nombre"
 
-    public TiendaDeAbarrotes(int Codigo, String Nombre) {//Constructor de la clase padre
+    public TiendaDeAbarrotes(String Codigo, String Nombre) {//Constructor de la clase padre
         this.codigo = Codigo; //Asignacion de valores privados a las globales de la clase padre
         this.nombre = Nombre;
     }//Fin del constructor de la clase TiendaDeAbarrotes
@@ -89,8 +89,8 @@ public class TiendaDeAbarrotes {//Clase principal y clase padre
     }//Fin del metodo del menu del cliente
 
     public static void menuDueno() throws IOException {//Inicio del metodo menuDueno
-        Articulo llamandoArticulos = new Articulo(1, "");//Llamada del constructor de la clase Articulo con variables introducidas manualmente (No afecta en nada)
-        Proveedor llamandoProveedor = new Proveedor(1, "", "");//Llamada del constructor de la clase Proveedor con variables asignadas manualmente (No afecta en nada)
+        Articulo llamandoArticulos = new Articulo("", "");//Llamada del constructor de la clase Articulo con variables introducidas manualmente (No afecta en nada)
+        Proveedor llamandoProveedor = new Proveedor("", "", "");//Llamada del constructor de la clase Proveedor con variables asignadas manualmente (No afecta en nada)
         int respuestaDueno = 0;//Variable
         leer.nextLine(); //Limpieza del buffer del scanner
         do {//Inicio de la estructura repetitiva do while
