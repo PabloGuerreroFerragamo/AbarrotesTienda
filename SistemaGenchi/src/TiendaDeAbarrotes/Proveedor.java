@@ -23,41 +23,65 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
         this.empresaProveedor = Empresa;//Asigna el valor del parámetro Empresa al atributo empresaProveedor
     }
 
-    int get(int Codi) {//Este método solicita al usuario que ingrese el ID del proveedor y devuelve el valor ingresado.
-        System.out.print("Ingrese el ID del proveedor: ");
+    int get(int Codi) throws IOException {//Este método solicita al usuario que ingrese el ID del proveedor y devuelve el valor ingresado.
+        System.out.println("Ingrese el ID del proveedor:          "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
+        leer.nextLine();
         codigo = leer.nextLine();
+        if (codigo.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+            menuProveedoresDueno();
+        }
         return Integer.parseInt(codigo);
     }
 
-    String get(String Nombre) {//Este método solicita al usuario que ingrese el nombre del proveedor y devuelve el valor ingresado.
-        System.out.print("Ingrese el nombre del proveedor: ");
-        leer.nextLine();
+    String get(String Nombre) throws IOException {//Este método solicita al usuario que ingrese el nombre del proveedor y devuelve el valor ingresado.
+        System.out.println("Ingrese el nombre del proveedor:          "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
         nombre = leer.nextLine();
+        if (nombre.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+            menuProveedoresDueno();
+        }
         return nombre;
     }
 
-    String getEmpresa() {//Este método solicita al usuario que ingrese el nombre de la empresa del proveedor y devuelve el valor ingresado.
-        System.out.print("Ingrese la empresa del proveedor: ");
+    String getEmpresa() throws IOException {//Este método solicita al usuario que ingrese el nombre de la empresa del proveedor y devuelve el valor ingresado.
+        System.out.println("Ingrese la empresa del proveedor:         "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
         empresaProveedor = leer.nextLine();
+        if (empresaProveedor.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+            menuProveedoresDueno();
+        }
         return empresaProveedor;
     }
 
-    String getCorreoE() {//Este método solicita al usuario que ingrese el correo electrónico del proveedor y devuelve el valor ingresado.
-        System.out.print("Ingrese el correo electronico del proveedor: ");
+    String getCorreoE() throws IOException {//Este método solicita al usuario que ingrese el correo electrónico del proveedor y devuelve el valor ingresado.
+        System.out.println("Ingrese el correo electronico del proveedor:          "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
         correoElectronico = leer.nextLine();
+        if (correoElectronico.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+            menuProveedoresDueno();
+        }
         return correoElectronico;
     }
 
-    String getUbicacion() {//Este método solicita al usuario que ingrese la ubicación del proveedor y devuelve el valor ingresado.
-        System.out.print("Ingrese la ubicacion del proveedor: ");
+    String getUbicacion() throws IOException {//Este método solicita al usuario que ingrese la ubicación del proveedor y devuelve el valor ingresado.
+        System.out.println("Ingrese la ubicacion del proveedor:           "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("(Para cancelar la operacion, ingrese 'X')");
         ubicacionProveedor = leer.nextLine();
+        if (ubicacionProveedor.equalsIgnoreCase("X")) {
+            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+            menuProveedoresDueno();
+        }
         return ubicacionProveedor;
     }
 
     void agregarProveedores() throws IOException {//Este método permite agregar proveedores, en un archivo llamado "Proveedores.txt". 
 
         try {
-
             FileWriter fw = new FileWriter("Proveedores.txt", true);// Abre el archivo "Proveedores.txt" en modo de escritura (true indica que se añadirán los datos al final del archivo si existe)
             BufferedWriter bw = new BufferedWriter(fw);// // Crea un buffer de escritura para mejorar el rendimiento al escribir en el archivo
             PrintWriter pw = new PrintWriter(bw);  // Crea un objeto PrintWriter para escribir en el archivo de manera conveniente
@@ -102,7 +126,8 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             }
             String[] Arreglo = v.toArray(new String[v.size()]);// Convierte el vector en un arreglo de cadenas
             if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {//Verifica si se han agregado proveedores
-                System.out.println("\n"+ANSI_RED + "No has agregado proveedores aun\n" + ANSI_RESET);
+                System.out.println("\n" + ANSI_RED + "No has agregado proveedores aun\n" + ANSI_RESET);
+                menuProveedoresDueno();
             } else {
                 System.out.println(ANSI_GREEN + "_-_-_-_-_-_-_-_-_Proveedores Existentes_-_-_-_-_-_-_-_-_");
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {// Muestra en pantalla la información de todos los proveedores exitentes
@@ -228,13 +253,13 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             mostrarProveedores();
         }
         try {
-            System.out.print(ANSI_GREEN+"Ingrese el codigo del proveedor, que proporcionara este producto: "+ANSI_RESET);
+            System.out.print(ANSI_GREEN + "Ingrese el codigo del proveedor, que proporcionara este producto: " + ANSI_RESET);
             System.out.println("\n(Para cancelar la operacion, ingrese 'X')");
             codigoBuscado = leer.next();
             if (codigoBuscado.equalsIgnoreCase("X")) {
-            System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
-            llamador.menuArticulosDueno();
-        }
+                System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+                llamador.menuArticulosDueno();
+            }
             leer.nextLine(); // Limpiar el buffer
 
             List<String> lineas = new ArrayList<>();
@@ -248,9 +273,10 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 if (codigo == Integer.parseInt(codigoBuscado)) {
                     mostrarArticuloPorCodigo(codigo);
                     selccionProveedor = empresaProveedor;
-                }
-                else{
-                    System.out.println(ANSI_RED+"No existe ese proveedor, intentalo de nuevo\n"+ANSI_RESET);
+                } else {
+                    System.out.println("\n" + ANSI_RED + "No existe ese proveedor, intentalo de nuevo\n");
+                    System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+                    llamador.menuArticulosDueno();
                 }
             }
             br.close();
@@ -261,7 +287,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 pw.println(line);
             }
             pw.close();
-            System.out.println(ANSI_GREEN+"El proveedor se ha seleccionado correctamente.\n");
+            System.out.println(ANSI_GREEN + "El proveedor se ha seleccionado correctamente.\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -283,7 +309,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 if (codigoArticulo == codigo) {
                     encontrado = true;
                     empresaProveedor = partes[2];
-                    System.out.println(ANSI_GREEN+"Proveedor encontrado:"+ANSI_RESET);
+                    System.out.println(ANSI_GREEN + "Proveedor encontrado:" + ANSI_RESET);
                     System.out.println("Codigo: " + partes[0]);
                     System.out.println("Nombre: " + partes[1]);
                     System.out.println("Nombre de la empresa: " + partes[2]);

@@ -128,7 +128,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 creararchivoventafinal.close();
             }
         } else {
-            System.out.println("\n" + ANSI_RED + "No hay tickets guardados para cerrar la venta, no han llegado "+ANSI_PURPLE+"clientes"+ANSI_RED+" :c\n" + ANSI_RESET);
+            System.out.println("\n" + ANSI_RED + "No hay tickets guardados para cerrar la venta, no han llegado " + ANSI_PURPLE + "clientes" + ANSI_RED + " :c\n" + ANSI_RESET);
         }
     }//Fin del metodo cerrarVenta
 
@@ -141,8 +141,8 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
             BufferedReader lecturaarchivoarticulos = new BufferedReader(new FileReader(archivoarticulos));//Creacion de un objeto de tipo BufferedReader llamado "lecturaarchivoarticulos"
             PrintWriter escrituraarchivocarrito = new PrintWriter(creaarchivocarrito);//Creacion de un objeo de tipo PrintWriter llamado "escrituraarchivocarrito"
             PrintWriter escrituraarchivoarticulos = new PrintWriter(creararchivoarticulos);//Creacion de un objeto de tipo PrintWriter llamado "escrituraarchivoarticulos"
-            if(archivoarticulos.length()==0){
-                System.out.println(ANSI_RED+"No hay ningun articulo, el"+ANSI_GREEN+" Dueno "+ANSI_RED+"no ha anadido articulos >:c");
+            if (archivoarticulos.length() == 0) {
+                System.out.println(ANSI_RED + "No hay ningun articulo, el" + ANSI_GREEN + " Dueno " + ANSI_RED + "no ha anadido articulos >:c");
                 menuCliente();
             }
             String st;//Creacion de una variable de tipo String
@@ -162,8 +162,16 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 }//Fin del ciclo for
                 System.out.println("\n" + "Elige tus productos escribiendo el nombre (Para dejar de comprar ingrese 'X'):" + "\n");//Mensaje solicitando al usuario que ingrese el nombre del producto a adquirir
                 productoelegido = leerProducto.nextLine();//El nombre introducido por el usuario se asigna a la variable "productoelegido"
-                if(productoelegido.equalsIgnoreCase("X")){
-                    menuCliente();
+                if (productoelegido.equalsIgnoreCase("X")) {
+                    FileWriter flasheararchivoarticulos = new FileWriter(archivoarticulos, false);//Objeto de tipo FileWriter que elimina los datos del archivo "Articulos"
+                    for (int r = 0; Arreglo.length > r; r++) {//Inicio de la estructura repetitiva for
+                        escrituraarchivoarticulos.println(Arreglo[r]);//Se imprime la copia fiel del archivo articulos con el articulo elegido ya actualizado con su stock restado por la cantidad elegida por el usuario
+                    }//Fin de la estructura repetitiva for
+                    escrituraarchivocarrito.close();//Se cierra el objeto llamado "escrituraarchivocarrito"
+                    escrituraarchivoarticulos.close();//Se cierra el objeto llamado "escrituraarchivoarticulos"
+                    creaarchivocarrito.close();//Se cierra el objeto llamado "creaarchivocarrito"
+                    creararchivoarticulos.close();//Se cierra el objeto llamado "creararchivoarticulos"
+                    menuCliente();//Se llama el metodo menuCliente
                 }
                 for (int renglon = 0; Arreglo.length > renglon; renglon++) {//Inicio de una estructura repetitiva for
                     copiarenglon = Arreglo[renglon];//Del arreglo "Arreglo" se copia el valor o renglon a una vaiable de tipo String llamado "copiarrenglon"
@@ -285,7 +293,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 PrintWriter pw = new PrintWriter(bw);//Creacion de un objeo de tipo PrintWriter llamado "pw"
                 pw.print(get(1));//Llamada al metodo get de tipo entero que recibe un parametro de tipo entero, al terminar de llamar escribe al archivo articulos lo que devuelve el metodo, es decir, el codigo
                 if (validarCodigoArticulo(Integer.parseInt(codigo))) {//Segunda estructura if con condicion: Si la validacion del codigo es verdadera
-                    System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");//Mensaje al usuario
+                    System.out.println("\n" + ANSI_RED + "El codigo ingresado ya existe, no se puede agregar el articulo.\n" + ANSI_GREEN);//Mensaje al usuario
                     return;//Se regresa
                 }//Fin de la segunda estructura if
                 pw.print("," + get(""));//Llamada al metodo get de tipo String que recibe un parametro de tipo String, al terminar el metodo, se imprime al archivoarticulos lo que devuelve el metodo
