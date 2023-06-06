@@ -39,6 +39,7 @@ public class TiendaDeAbarrotes {//Clase principal y clase padre
         int respuestaUser = 0;
         do {//Inicio del ciclo repetitivo do while
             System.out.println(ANSI_YELLOW + "Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-        " + "#Menu Principal#" + ANSI_RESET);
+            System.out.println("Recuerda que todos los IDs debe ser numericos y deben estar en el rango de 0000 a 9999");
             System.out.println("1.- Soy un cliente    2.-Soy el dueno   3.-Salir del sistema");
             respuestaUser = leer.nextInt();//Se asigna la respuesta del usuario a la variable llamada "respuestaUser"
             switch (respuestaUser) {//Inicio de estructura selectiva Switch y Comparacion de la respuesta 
@@ -90,7 +91,7 @@ public class TiendaDeAbarrotes {//Clase principal y clase padre
 
     public static void menuDueno() throws IOException {//Inicio del metodo menuDueno
         Articulo llamandoArticulos = new Articulo("", "");//Llamada del constructor de la clase Articulo con variables introducidas manualmente (No afecta en nada)
-        Proveedor llamandoProveedor = new Proveedor("", "", "");//Llamada del constructor de la clase Proveedor con variables asignadas manualmente (No afecta en nada)
+        Proveedor llamandoProveedor = new Proveedor("", "", "", "", "");//Llamada del constructor de la clase Proveedor con variables asignadas manualmente (No afecta en nada)
         int respuestaDueno = 0;//Variable
         leer.nextLine(); //Limpieza del buffer del scanner
         do {//Inicio de la estructura repetitiva do while

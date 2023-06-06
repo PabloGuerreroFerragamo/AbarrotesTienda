@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la clase TiendaDeAbarrotes
 
     //Instancias
-    Scanner leerint = new Scanner(System.in);
     Scanner leer = new Scanner(System.in);
     public static File archivoProveedores = new File("Proveedores.txt");
 
@@ -17,13 +16,17 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     String correoElectronico;
     static int numProveedores = 0;
     int contadorProveedores = 0;
+     
 
-    public Proveedor(String Codigo, String Nombre, String Empresa) {//Se define el constructor recibe parametros y asigna valores a las variables de instancia.
+    public Proveedor(String Empresa, String Ubicacion, String Correo, String Codigo, String Nombre) {//Se define el constructor recibe parametros y asigna valores a las variables de instancia
         super(Codigo, Nombre);
-        this.empresaProveedor = Empresa;//Asigna el valor del parámetro Empresa al atributo empresaProveedor
+        //Se asignan los valores de los parametros a las variables globales
+        empresaProveedor = Empresa;
+        ubicacionProveedor = Ubicacion;
+        correoElectronico = Correo;
     }
 
-    int get(int Codi) throws IOException {//Este método solicita al usuario que ingrese el ID del proveedor y devuelve el valor ingresado.
+    String get(int Codi) throws IOException {//Este método solicita al usuario que ingrese el ID del proveedor y devuelve el valor ingresado.
         System.out.println("Ingrese el ID del proveedor:          "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         System.out.println("(Para cancelar la operacion, ingrese 'X')");
         leer.nextLine();
@@ -32,7 +35,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
             menuProveedoresDueno();
         }
-        return Integer.parseInt(codigo);
+        return codigo;
     }
 
     String get(String Nombre) throws IOException {//Este método solicita al usuario que ingrese el nombre del proveedor y devuelve el valor ingresado.
@@ -86,10 +89,17 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             BufferedWriter bw = new BufferedWriter(fw);// // Crea un buffer de escritura para mejorar el rendimiento al escribir en el archivo
             PrintWriter pw = new PrintWriter(bw);  // Crea un objeto PrintWriter para escribir en el archivo de manera conveniente
             pw.print(get(1));// Escribe en el archivo el resultado de la función get(1)
-            if (validarCodigoProveedor(Integer.parseInt(codigo))) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
+
+            //CONDICIONES VALIDADORES DE IDs
+            if (validarExistenciaCodigoProveedor(codigo)) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
                 System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
-                return;
+                return;//Hace que el metodo se acabe
             }
+            if (!validacionCuatroNumeros(codigo)) {//Verifica que el codigo del proveedor este entre el rango establecido
+                System.out.println(ANSI_RED + "El id debe ser numerico y debe estar en el rango de 0000 a 9999" + ANSI_GREEN + "\n");
+                return;//Hace que el metodo se acabe
+            }
+
             // Escribe en el archivo los resultados de las siguientes haciendo uso de polimorfismo mediante las funciones get()
             pw.print("," + get(""));
             pw.print("," + getEmpresa());
@@ -136,7 +146,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 }
             }
 
-        } catch (IOException e) {//Muestra un mensaje de error en caso de que ocurra una excepción
+        } catch (IOException e) {// En caso de que ocurra una excepción de tipo IOException, muestra el stack trace del error
         }
         System.out.println("");
     }
@@ -147,18 +157,19 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             ArrayList<String> lineas = new ArrayList<>();//Crea una lista para almacenar las líneas del archivo
 
             String linea;
-            int codigoEliminar;
+            String codigoEliminar;
 
             mostrarProveedores();//Llama al metodo mostrarProveedores
 
             System.out.println("Introduce el código del proveedor a eliminar:");
-            codigoEliminar = leer.nextInt();
+            leer.nextLine();
+            codigoEliminar = leer.nextLine();
 
             boolean encontrado = false;
 
             while ((linea = br.readLine()) != null) {// Lee cada línea del archivo
                 String[] partes = linea.split(","); // Divide la línea en partes utilizando como separador la coma ","
-                int codigo = Integer.parseInt(partes[0]);// Obtiene el código del proveedor de la primera parte
+                String codigo = partes[0];// Obtiene el código del proveedor de la primera parte
 
                 if (codigo == codigoEliminar) {//Si se encuentra el proveedor a eliminar, se marca como encontrado
                     encontrado = true;
@@ -186,31 +197,31 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
 
             }
         } catch (IOException e) { // En caso de que ocurra una excepción de tipo IOException, muestra el stack trace del error
-            e.printStackTrace();
         }
     }
 
     void modificarProveedor() {
-        String nuevoNombre;
-        String nuevoNombreEmpresa;
-        String nuevaUbi;
-        String nuevoCorreo;
-        int elSwichNoSirve = 0;
+        String nuevoNombre; // Variable para almacenar el nuevo nombre del proveedor
+        String nuevoNombreEmpresa;// Variable para almacenar el nuevo nombre de la empresa
+        String nuevaUbi; // Variable para almacenar la nueva ubicacion del proveedor
+        String nuevoCorreo;// Variable para almacenar el nuevo correo del proveedor
+        String codigoBuscado="";
 
-        mostrarProveedores();
+        mostrarProveedores();// Llama al método para mostrar los proveedores existentes
 
         try {
             System.out.println("Introduce el código del proveedor a modificar:");
-            int codigoBuscado = leer.nextInt();
+            codigoBuscado = leer.nextLine();// Lee el código del proveedor a modificar
             leer.nextLine(); // Limpiar el buffer
-            List<String> lineas = new ArrayList<>();
-            BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                int codigo = Integer.parseInt(datos[0]);
-                if (codigo == codigoBuscado) {
-                    // Modificar el artículo
+            List<String> lineas = new ArrayList<>();// ArrayList para almacenar las líneas del archivo
+            BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));// Abre el archivo para lectura
+            String linea;//Variable String para almacenar lineas del archivo
+            while ((linea = br.readLine()) != null) {// Lee cada línea del archivo
+                String[] datos = linea.split(",");// Divide la línea en datos separados por comas
+                String codigoPartido = datos[0];// Convierte el código del proveedor a entero
+                
+                if (codigoPartido == codigoBuscado) {// Comprueba si el código coincide con el proveedor buscado
+                    // Modificar los datos del proveedor
                     System.out.println("Introduce el nuevo nombre del proveedor:");
                     nuevoNombre = leer.nextLine();
                     System.out.println("Introduce el nuevo nombre de la empresa del proveedor:");
@@ -219,47 +230,54 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                     nuevaUbi = leer.nextLine();
                     System.out.println("Ingrese el correo electronico del proveedor: ");
                     nuevoCorreo = leer.nextLine();
-                    linea = codigo + "," + nuevoNombre + "," + nuevoNombreEmpresa + "," + nuevaUbi + "," + nuevoCorreo;
+                    linea = codigo + "," + nuevoNombre + "," + nuevoNombreEmpresa + "," + nuevaUbi + "," + nuevoCorreo;// Actualiza la línea con los nuevos valores
                     System.out.println("El proveedor se ha modificado correctamente.");
                 } else {
                     System.out.println("No se encontró ningún proveedor con el código especificado");
-                    elSwichNoSirve++;
                 }
-                lineas.add(linea);
+                lineas.add(linea);// Agrega la línea actualizada a la lista del ArrayList lineas
             }
-            br.close();
+            br.close();// Cierra el BufferedReader
+            
+            // Abre el archivo para la escritura del nuevo contenido en el archivo 
             FileWriter fw = new FileWriter(archivoProveedores, false);
             BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);
-            for (String line : lineas) {
-                pw.println(line);
+            PrintWriter pw = new PrintWriter(bw);     
+            for (String line : lineas) {//for-each, recorre los elementos del la lista del ArrayList lineas, asignando cada elemento a la variable line
+                pw.println(line);// Escribe cada línea en el archivo
             }
 
-            pw.close();
+            pw.close();// Cierra el PrintWriter
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {// En caso de que ocurra una excepción de tipo IOException, muestra el stack trace del error
         }
-        elSwichNoSirve = 0;
     }
 
-    String get(String proveedor, int ola) {
-        String selccionProveedor = "";
-        String codigoBuscado;
+    String get(String proveedor, int ola) {//Metodo que pide seleccionar un proveedor
+        String selccionProveedor = "";// Variable para almacenar la selección del proveedor
+        String codigoBuscado;// Variable para almacenar el código del proveedor buscado
 
-        if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {
+        if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {//Verifica si se han agregado proveedores
             System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
         } else {
-            mostrarProveedores();
+            mostrarProveedores();// Llama al método para mostrar los proveedores existentes
         }
         try {
             System.out.print(ANSI_GREEN + "Ingrese el codigo del proveedor, que proporcionara este producto: " + ANSI_RESET);
             System.out.println("\n(Para cancelar la operacion, ingrese 'X')");
-            codigoBuscado = leer.next();
+            leer.nextLine();
+            codigoBuscado = leer.nextLine();// Lee el código del proveedor proporcionado
+            
             if (codigoBuscado.equalsIgnoreCase("X")) {
                 System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
                 llamador.menuArticulosDueno();
             }
+            //CONDICIONES VALIDADORES DE IDs
+            if (validarExistenciaCodigoProveedor(codigoBuscado)) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
+                System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
+                return null;
+            }
+
             leer.nextLine(); // Limpiar el buffer
 
             List<String> lineas = new ArrayList<>();
@@ -361,15 +379,15 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
 
     }
 
-    public boolean validarCodigoProveedor(int codigo) {//Inicio del metodo validarCodigoArticulo que acepta un parametro de tipo int
-        int codigoArticulo = 0;//Inicializacion y creacion de una variable de tipo entero llamada codigoArticulo
+    public static boolean validarExistenciaCodigoProveedor(String codigo) {//Inicio del metodo validarCodigoArticulo que acepta un parametro de tipo int
+        String codigoArticulo = "";//Inicializacion y creacion de una variable de tipo entero llamada codigoArticulo
         try {//Inicio de Try-Catch
-            BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));//Creacion de un objeto de tipo BufferedReader para la lectura de un archivo
+            BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));//Creacion de un objeto de tipo BufferedReader para la lectura de un archivo
             String linea;//Creacion de una variable llamada "linea" de tipo String
 
             while ((linea = br.readLine()) != null) {//Inicio de estructura repetitiva while con condicion: mientras la linea leida sea diferente a "nulo " o "vacio"
                 String[] partes = linea.split(",");//Se crea un arreglo de tipo string llamado "partes" el cual, se asigna el renglon dividido con ayuda de los delimitadores ","
-                codigoArticulo = Integer.parseInt(partes[0]);//Asignacion de valor a la variable llamada "codigoArticulo" que convierte de String a entero el primer registro del renglon dividido que representa el codigo del producto a validar
+                codigoArticulo = partes[0];//Asignacion de valor a la variable llamada "codigoArticulo" que convierte de String a entero el primer registro del renglon dividido que representa el codigo del producto a validar
 
                 if (codigoArticulo == codigo) {//Primera estructura if con la condicion: Si el codigoArticulo es igual al codigo
                     br.close();//El objeto llamado "br" se cierra
@@ -385,5 +403,10 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
 
         return false; // Si el codigo no existe, se devuelve un booleano "False"
     }//Fin del metodo validarcodigoArticulo
-
+    
+    public static boolean validacionCuatroNumeros(String datos) {
+        //CASO NUMEROS
+        return datos.matches("[0-9]{1,4}");//para poner mas numero de digitos por ejemplo 111, son 3, entonce pondremos ("[0-9](1,3)")
+    }
+    
 }//Fin de la clase hija llamada "proveedor" 

@@ -16,7 +16,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
     public static File archivoproveedores = new File("Proveedores.txt");
     public static File archivoventafinal = new File("VentaFinal.txt");
 
-    Proveedor provee = new Proveedor("", "", "");//Objeto de la clase Proveedor llamada "provee" con valores introducidos manualmente
+    Proveedor provee = new Proveedor("", "", "", "", "");//Objeto de la clase Proveedor llamada "provee" con valores introducidos manualmente
     String precio;//Variable de tipo String Publica llamada "precio"
     String stock;//Variable de tipo String Publica llamada "Stock"
 
