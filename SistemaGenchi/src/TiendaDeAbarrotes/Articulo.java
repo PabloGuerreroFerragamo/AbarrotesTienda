@@ -25,7 +25,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
     }//Fin del constructor
 //Los gets y polimorfismo
 
-    public int get(int Codigo) throws IOException {//Inicio del metodo get de tipo entero, recibe una variable de tipo entero
+    public String get(int Codigo) throws IOException {//Inicio del metodo get de tipo entero, recibe una variable de tipo entero
         leer.nextLine();//Limpieza del buffer del Scanner leer
         System.out.println("Introduce el codigo del nuevo producto:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);//Solicitud de introduccion del codigo
         System.out.println("(Para cancelar la operacion, ingrese 'X')");
@@ -34,7 +34,7 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
             System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
             menuArticulosDueno();
         }
-        return Integer.parseInt(codigo);//Devolucion del valor de la variable codigo
+        return codigo;//Devolucion del valor de la variable codigo
     }//Fin del metodo get de tipo entero que recibe una variable de tipo entera 
 
     public String get(String Nombre) throws IOException {//Inicio del metodo get de tipo String, recibe una variable de tipo String
@@ -292,10 +292,17 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
                 BufferedWriter bw = new BufferedWriter(fw);//Creacion de un objeto de tipo BufferedWriter llamado "bw"
                 PrintWriter pw = new PrintWriter(bw);//Creacion de un objeo de tipo PrintWriter llamado "pw"
                 pw.print(get(1));//Llamada al metodo get de tipo entero que recibe un parametro de tipo entero, al terminar de llamar escribe al archivo articulos lo que devuelve el metodo, es decir, el codigo
-                if (validarCodigoArticulo(Integer.parseInt(codigo))) {//Segunda estructura if con condicion: Si la validacion del codigo es verdadera
-                    System.out.println("\n" + ANSI_RED + "El codigo ingresado ya existe, no se puede agregar el articulo.\n" + ANSI_GREEN);//Mensaje al usuario
-                    return;//Se regresa
-                }//Fin de la segunda estructura if
+                
+                //CONDICIONES VALIDADORES DE IDs
+            if (validarExistenciaCodigoProveedor(codigo)) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
+                System.out.println("El código ingresado ya existe, no se puede agregar el artículo.");
+                return;//Hace que el metodo se acabe
+            }
+            if (!validacionCuatroNumeros(codigo)) {//Verifica que el codigo del proveedor este entre el rango establecido
+                System.out.println(ANSI_RED + "El id debe ser numerico y debe estar en el rango de 0000 a 9999" + ANSI_GREEN + "\n");
+                return;//Hace que el metodo se acabe
+            }
+                
                 pw.print("," + get(""));//Llamada al metodo get de tipo String que recibe un parametro de tipo String, al terminar el metodo, se imprime al archivoarticulos lo que devuelve el metodo
                 pw.print("," + get(1.0));//Llamada al metodo get de tipo Double que recibe un parametro de tipo Double, al terminar el metodo, se imprime al archivoarticulos lo que devuelve el metodo
                 pw.print("," + get(1, ""));//Llamada al metodo get de tipo int que recibe dos parametros de tipo int y String respectivamente, al terminar el metodo, se imprime al archivoarticulos lo que devuelve el metodo
@@ -513,4 +520,46 @@ public class Articulo extends TiendaDeAbarrotes {//Clase hija de la clase padre 
         return false; // Si el codigo no existe, se devuelve un booleano "False"
     }//Fin del metodo validarcodigoArticulo
 
+    public static boolean validarExistenciaCodigoProveedor(String codigoAValidar) {//Inicio del metodo validarCodigoArticulo que acepta un parametro de tipo int
+        String codigoArticulo = "";//Inicializacion y creacion de una variable de tipo entero llamada codigoArticulo
+        try {//Inicio de Try-Catch
+            BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));//Creacion de un objeto de tipo BufferedReader para la lectura de un archivo
+            String linea;//Creacion de una variable llamada "linea" de tipo String
+
+            while ((linea = br.readLine()) != null) {//Inicio de estructura repetitiva while con condicion: mientras la linea leida sea diferente a "nulo " o "vacio"
+                String[] partes = linea.split(",");//Se crea un arreglo de tipo string llamado "partes" el cual, se asigna el renglon dividido con ayuda de los delimitadores ","
+                codigoArticulo = partes[0];//Asignacion de valor a la variable llamada "codigoArticulo" que convierte de String a entero el primer registro del renglon dividido que representa el codigo del producto a validar
+
+                if (codigoArticulo.equals(codigoAValidar)) {//Primera estructura if con la condicion: Si el codigoArticulo es igual al codigo
+                    br.close();//El objeto llamado "br" se cierra
+                    return true; // Si el codigo existe, se devuelve un booleano "True"
+                }//Cierre del primer if
+            }//Ciere del ciclo while
+
+            br.close();//Ciere del objeto llamado "br"
+
+        } catch (IOException e) {//Cierre del Try-Catch
+            e.printStackTrace();
+        }//Cierre del Try-Catch
+
+        return false; // Si el codigo no existe, se devuelve un booleano "False"
+    }//Fin del metodo validarcodigoArticulo
+
+    public static boolean validacionCuatroNumeros(String datos) {
+        //CASO NUMEROS
+        return datos.matches("[0-9]{1,4}");//para poner mas numero de digitos por ejemplo 111, son 3, entonce pondremos ("[0-9](1,3)")
+    }
+
+    public static boolean validarLetras(String datos) {
+        //CASO LETRAS
+        return datos.matches("[a-zA-Z]{1,1000}");
+    }
+
+    public void condicionLetras(String codigoIntroducido) throws IOException {
+        if (!validarLetras(codigoIntroducido)) {
+            System.out.println("El texto ingresado debe contener unicamente letras");
+            menuArticulosDueno();
+        }
+    }
+    
 }//Fin de la clase hija llamada Articulo
