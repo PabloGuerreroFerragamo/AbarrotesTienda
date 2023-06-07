@@ -16,7 +16,6 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     String correoElectronico;
     static int numProveedores = 0;
     int contadorProveedores = 0;
-     
 
     public Proveedor(String Empresa, String Ubicacion, String Correo, String Codigo, String Nombre) {//Se define el constructor recibe parametros y asigna valores a las variables de instancia
         super(Codigo, Nombre);
@@ -27,7 +26,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     }
 
     String get(int Codi) throws IOException {//Este método solicita al usuario que ingrese el ID del proveedor y devuelve el valor ingresado.
-        System.out.println("Ingrese el ID del proveedor:          "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("Ingrese el ID del proveedor:          " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         System.out.println("(Para cancelar la operacion, ingrese 'X')");
         leer.nextLine();
         codigo = leer.nextLine();
@@ -39,18 +38,19 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     }
 
     String get(String Nombre) throws IOException {//Este método solicita al usuario que ingrese el nombre del proveedor y devuelve el valor ingresado.
-        System.out.println("Ingrese el nombre del proveedor:          "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("Ingrese el nombre del proveedor:          " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         System.out.println("(Para cancelar la operacion, ingrese 'X')");
         nombre = leer.nextLine();
         if (nombre.equalsIgnoreCase("X")) {
             System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
             menuProveedoresDueno();
         }
+        condicionLetras(nombre);
         return nombre;
     }
 
     String getEmpresa() throws IOException {//Este método solicita al usuario que ingrese el nombre de la empresa del proveedor y devuelve el valor ingresado.
-        System.out.println("Ingrese la empresa del proveedor:         "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("Ingrese la empresa del proveedor:         " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         System.out.println("(Para cancelar la operacion, ingrese 'X')");
         empresaProveedor = leer.nextLine();
         if (empresaProveedor.equalsIgnoreCase("X")) {
@@ -61,7 +61,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     }
 
     String getCorreoE() throws IOException {//Este método solicita al usuario que ingrese el correo electrónico del proveedor y devuelve el valor ingresado.
-        System.out.println("Ingrese el correo electronico del proveedor:          "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("Ingrese el correo electronico del proveedor:          " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         System.out.println("(Para cancelar la operacion, ingrese 'X')");
         correoElectronico = leer.nextLine();
         if (correoElectronico.equalsIgnoreCase("X")) {
@@ -72,7 +72,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     }
 
     String getUbicacion() throws IOException {//Este método solicita al usuario que ingrese la ubicación del proveedor y devuelve el valor ingresado.
-        System.out.println("Ingrese la ubicacion del proveedor:           "+ ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
+        System.out.println("Ingrese la ubicacion del proveedor:           " + ANSI_GREEN + "#Dueno#" + ANSI_GREEN);
         System.out.println("(Para cancelar la operacion, ingrese 'X')");
         ubicacionProveedor = leer.nextLine();
         if (ubicacionProveedor.equalsIgnoreCase("X")) {
@@ -159,19 +159,29 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             String linea;
             String codigoEliminar;
 
-            mostrarProveedores();//Llama al metodo mostrarProveedores
+            boolean encontrado = false;
 
-            System.out.println("Introduce el código del proveedor a eliminar:");
+            mostrarProveedores();//Llama al metodo mostrarProveedores
             leer.nextLine();
+            System.out.println("Introduce el ID del proveedor a eliminar:");
+            System.out.println("(Para cancelar la operacion, ingrese 'X')");
             codigoEliminar = leer.nextLine();
 
-            boolean encontrado = false;
+            if (codigoEliminar.equalsIgnoreCase("X")) {
+                System.out.println(ANSI_RED + "Operacion cancelada, No se elimino ningun Proveedor\n" + ANSI_GREEN);
+                menuProveedoresDueno();
+            }
+
+            if (!validacionCuatroNumeros(codigoEliminar)) {//Verifica que el codigo del proveedor este entre el rango establecido
+                System.out.println(ANSI_RED + "Debe ingresar un ID de proveedor existente" + ANSI_GREEN + "\n");
+                return;//Hace que el metodo se acabe
+            }
 
             while ((linea = br.readLine()) != null) {// Lee cada línea del archivo
                 String[] partes = linea.split(","); // Divide la línea en partes utilizando como separador la coma ","
-                String codigo = partes[0];// Obtiene el código del proveedor de la primera parte
+                String codigoPartes = partes[0];// Obtiene el código del proveedor de la primera parte
 
-                if (codigo == codigoEliminar) {//Si se encuentra el proveedor a eliminar, se marca como encontrado
+                if (codigoPartes.equals(codigoEliminar)) {//Si se encuentra el proveedor a eliminar, se marca como encontrado
                     encontrado = true;
                     System.out.println("El siguiente proveedor ha sido eliminado:");
                     System.out.println(linea);
@@ -205,44 +215,80 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
         String nuevoNombreEmpresa;// Variable para almacenar el nuevo nombre de la empresa
         String nuevaUbi; // Variable para almacenar la nueva ubicacion del proveedor
         String nuevoCorreo;// Variable para almacenar el nuevo correo del proveedor
-        String codigoBuscado="";
+        String codigoBuscado = "";
+        int contadorModificar = 0;
 
         mostrarProveedores();// Llama al método para mostrar los proveedores existentes
 
         try {
-            System.out.println("Introduce el código del proveedor a modificar:");
-            codigoBuscado = leer.nextLine();// Lee el código del proveedor a modificar
             leer.nextLine(); // Limpiar el buffer
+            System.out.println("Introduce el código del proveedor a modificar:");
+            System.out.println("(Para cancelar la operacion, ingrese 'X')");
+            codigoBuscado = leer.nextLine();// Lee el código del proveedor a modificar
+
+            if (codigoBuscado.equalsIgnoreCase("X")) {
+                System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+                menuProveedoresDueno();
+            }
+
+            if (!validacionCuatroNumeros(codigoBuscado)) {//Verifica que el codigo del proveedor este entre el rango establecido
+                System.out.println(ANSI_RED + "Debe ingresar un ID de proveedor existente" + ANSI_GREEN + "\n");
+                return;//Hace que el metodo se acabe
+            }
             List<String> lineas = new ArrayList<>();// ArrayList para almacenar las líneas del archivo
             BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));// Abre el archivo para lectura
             String linea;//Variable String para almacenar lineas del archivo
             while ((linea = br.readLine()) != null) {// Lee cada línea del archivo
                 String[] datos = linea.split(",");// Divide la línea en datos separados por comas
                 String codigoPartido = datos[0];// Convierte el código del proveedor a entero
-                
-                if (codigoPartido == codigoBuscado) {// Comprueba si el código coincide con el proveedor buscado
+
+                if (codigoPartido.equals(codigoBuscado)) {// Comprueba si el código coincide con el proveedor buscado
+                    contadorModificar++;
                     // Modificar los datos del proveedor
                     System.out.println("Introduce el nuevo nombre del proveedor:");
+                    System.out.println("(Para cancelar la operacion, ingrese 'X')");
                     nuevoNombre = leer.nextLine();
+                    if (nuevoNombre.equalsIgnoreCase("X")) {
+                        System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+                        menuProveedoresDueno();
+                    }
                     System.out.println("Introduce el nuevo nombre de la empresa del proveedor:");
+                    System.out.println("(Para cancelar la operacion, ingrese 'X')");
                     nuevoNombreEmpresa = leer.nextLine();
+                    if (nuevoNombreEmpresa.equalsIgnoreCase("X")) {
+                        System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+                        menuProveedoresDueno();
+                    }
                     System.out.println("Ingrese la ubicacion del proveedor: ");
+                    System.out.println("(Para cancelar la operacion, ingrese 'X')");
                     nuevaUbi = leer.nextLine();
+                    if (nuevaUbi.equalsIgnoreCase("X")) {
+                        System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+                        menuProveedoresDueno();
+                    }
                     System.out.println("Ingrese el correo electronico del proveedor: ");
+                    System.out.println("(Para cancelar la operacion, ingrese 'X')");
                     nuevoCorreo = leer.nextLine();
-                    linea = codigo + "," + nuevoNombre + "," + nuevoNombreEmpresa + "," + nuevaUbi + "," + nuevoCorreo;// Actualiza la línea con los nuevos valores
+                    if (nuevoCorreo.equalsIgnoreCase("X")) {
+                        System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun Proveedor\n" + ANSI_GREEN);
+                        menuProveedoresDueno();
+                    }
+                    linea = codigoPartido + "," + nuevoNombre + "," + nuevoNombreEmpresa + "," + nuevoCorreo + "," + nuevaUbi;// Actualiza la línea con los nuevos valores
                     System.out.println("El proveedor se ha modificado correctamente.");
-                } else {
-                    System.out.println("No se encontró ningún proveedor con el código especificado");
                 }
+                if (contadorModificar == 0) {
+                    System.out.println("No se encontro un proveedor con ese ID");
+                }
+                contadorModificar = 0;
+
                 lineas.add(linea);// Agrega la línea actualizada a la lista del ArrayList lineas
             }
             br.close();// Cierra el BufferedReader
-            
+
             // Abre el archivo para la escritura del nuevo contenido en el archivo 
             FileWriter fw = new FileWriter(archivoProveedores, false);
             BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter pw = new PrintWriter(bw);     
+            PrintWriter pw = new PrintWriter(bw);
             for (String line : lineas) {//for-each, recorre los elementos del la lista del ArrayList lineas, asignando cada elemento a la variable line
                 pw.println(line);// Escribe cada línea en el archivo
             }
@@ -256,6 +302,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
     String get(String proveedor, int ola) {//Metodo que pide seleccionar un proveedor
         String selccionProveedor = "";// Variable para almacenar la selección del proveedor
         String codigoBuscado;// Variable para almacenar el código del proveedor buscado
+        int contadorFantasma = 0;
 
         if (!(archivoProveedores.exists()) || archivoProveedores.length() == 0) {//Verifica si se han agregado proveedores
             System.out.println("No hay proveedores registrados, por favor registra primero un proveedor");
@@ -265,37 +312,33 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
         try {
             System.out.print(ANSI_GREEN + "Ingrese el codigo del proveedor, que proporcionara este producto: " + ANSI_RESET);
             System.out.println("\n(Para cancelar la operacion, ingrese 'X')");
-            leer.nextLine();
             codigoBuscado = leer.nextLine();// Lee el código del proveedor proporcionado
-            
+
             if (codigoBuscado.equalsIgnoreCase("X")) {
                 System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
                 llamador.menuArticulosDueno();
             }
-            //CONDICIONES VALIDADORES DE IDs
-            if (validarExistenciaCodigoProveedor(codigoBuscado)) {//// Verifica si el código del proveedor ya existe llamando a la función validarCodigoProveedor(codigo)
-                System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
-                return null;
-            }
-
-            leer.nextLine(); // Limpiar el buffer
 
             List<String> lineas = new ArrayList<>();
             BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
-                int codigo = Integer.parseInt(datos[0]);
-//            int codigoProveedor=leerint.nextInt();
-                int posicionProveedor = -1;
-                if (codigo == Integer.parseInt(codigoBuscado)) {
-                    mostrarArticuloPorCodigo(codigo);
+                String codigoPartido = datos[0];
+
+                if (codigoPartido.equals(codigoBuscado)) {
+                    contadorFantasma++;
+                    mostrarProveedorPorCodigo(codigoPartido);
                     selccionProveedor = empresaProveedor;
-                } else {
+                }
+                if(contadorFantasma==0){
                     System.out.println("\n" + ANSI_RED + "No existe ese proveedor, intentalo de nuevo\n");
                     System.out.println(ANSI_RED + "Operacion cancelada, No se anadio ningun articulo\n" + ANSI_GREEN);
                     llamador.menuArticulosDueno();
                 }
+                contadorFantasma=0;
+                    
+                
             }
             br.close();
             FileWriter fw = new FileWriter(archivoProveedores, true);
@@ -312,19 +355,21 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
         return selccionProveedor;
     }
 
-    public void mostrarArticuloPorCodigo(int codigo) {
+    public void mostrarProveedorPorCodigo(String codigoRecibido) {
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(archivoProveedores));
 
             String linea;
             boolean encontrado = false;
-
+            
             while ((linea = br.readLine()) != null) {
                 String[] partes = linea.split(",");
-                int codigoArticulo = Integer.parseInt(partes[0]);
+                String codigoArticulo = partes[0];
 
-                if (codigoArticulo == codigo) {
+                
+                
+                if (codigoArticulo.equals(codigoRecibido)) {
                     encontrado = true;
                     empresaProveedor = partes[2];
                     System.out.println(ANSI_GREEN + "Proveedor encontrado:" + ANSI_RESET);
@@ -338,7 +383,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
             br.close();
 
             if (!encontrado) {
-                System.out.println("No se encontró ningún artículo con el código especificado.");
+                System.out.println("No se encontró ningún proveedor con el código especificado.");
             }
 
         } catch (IOException e) {
@@ -379,7 +424,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
 
     }
 
-    public static boolean validarExistenciaCodigoProveedor(String codigo) {//Inicio del metodo validarCodigoArticulo que acepta un parametro de tipo int
+    public static boolean validarExistenciaCodigoProveedor(String codigoAValidar) {//Inicio del metodo validarCodigoArticulo que acepta un parametro de tipo int
         String codigoArticulo = "";//Inicializacion y creacion de una variable de tipo entero llamada codigoArticulo
         try {//Inicio de Try-Catch
             BufferedReader br = new BufferedReader(new FileReader("Proveedores.txt"));//Creacion de un objeto de tipo BufferedReader para la lectura de un archivo
@@ -389,7 +434,7 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
                 String[] partes = linea.split(",");//Se crea un arreglo de tipo string llamado "partes" el cual, se asigna el renglon dividido con ayuda de los delimitadores ","
                 codigoArticulo = partes[0];//Asignacion de valor a la variable llamada "codigoArticulo" que convierte de String a entero el primer registro del renglon dividido que representa el codigo del producto a validar
 
-                if (codigoArticulo == codigo) {//Primera estructura if con la condicion: Si el codigoArticulo es igual al codigo
+                if (codigoArticulo.equals(codigoAValidar)) {//Primera estructura if con la condicion: Si el codigoArticulo es igual al codigo
                     br.close();//El objeto llamado "br" se cierra
                     return true; // Si el codigo existe, se devuelve un booleano "True"
                 }//Cierre del primer if
@@ -403,10 +448,22 @@ public class Proveedor extends TiendaDeAbarrotes {//Clase proveedor hija de la c
 
         return false; // Si el codigo no existe, se devuelve un booleano "False"
     }//Fin del metodo validarcodigoArticulo
-    
+
     public static boolean validacionCuatroNumeros(String datos) {
         //CASO NUMEROS
         return datos.matches("[0-9]{1,4}");//para poner mas numero de digitos por ejemplo 111, son 3, entonce pondremos ("[0-9](1,3)")
     }
-    
+
+    public static boolean validarLetras(String datos) {
+        //CASO LETRAS
+        return datos.matches("[a-zA-Z]{1,1000}");
+    }
+
+    public void condicionLetras(String codigoIntroducido) throws IOException {
+        if (!validarLetras(codigoIntroducido)) {
+            System.out.println("El texto ingresado debe contener unicamente letras");
+            menuProveedoresDueno();
+        }
+    }
+
 }//Fin de la clase hija llamada "proveedor" 

@@ -38,8 +38,7 @@ public class TiendaDeAbarrotes {//Clase principal y clase padre
     static void menuRoles() throws IOException {//Metodo del menu principal
         int respuestaUser = 0;
         do {//Inicio del ciclo repetitivo do while
-            System.out.println(ANSI_YELLOW + "Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-        " + "#Menu Principal#" + ANSI_RESET);
-            System.out.println("Recuerda que todos los IDs debe ser numericos y deben estar en el rango de 0000 a 9999");
+            System.out.println(ANSI_YELLOW + "Bienvenido a la tienda de abarrotes_-_-_-_-_-_-_-_-_-_-_-_-_-_-        " + "#Menu Principal#" + ANSI_RESET);           
             System.out.println("1.- Soy un cliente    2.-Soy el dueno   3.-Salir del sistema");
             respuestaUser = leer.nextInt();//Se asigna la respuesta del usuario a la variable llamada "respuestaUser"
             switch (respuestaUser) {//Inicio de estructura selectiva Switch y Comparacion de la respuesta 
@@ -96,6 +95,7 @@ public class TiendaDeAbarrotes {//Clase principal y clase padre
         leer.nextLine(); //Limpieza del buffer del scanner
         do {//Inicio de la estructura repetitiva do while
             System.out.println(ANSI_GREEN + "Con que quieres trabajar?_-_-_-_-_-_-_-_-_-_-_-_-_-_-       " + "#Dueno#" + ANSI_GREEN);
+            System.out.println("Recuerda que todos los IDs debe ser numericos y deben estar en el rango de 0000 a 9999");
             System.out.println("1. Articulos");
             System.out.println("2. Proveedor");
             System.out.println("3.-Cerrar venta diaria");
